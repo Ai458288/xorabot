@@ -1,0 +1,8 @@
+<h1 id="yazi"></h1>
+
+<script>
+const user = localStorage.getItem("user");
+if (!user) location.href = "index.html";
+document.getElementById("yazi").innerText =
+  "Merhaba " + user;
+</script>
