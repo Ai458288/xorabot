@@ -47,7 +47,7 @@
             </div>
             <h1 class="text-2xl font-black tracking-tighter text-white neon-text uppercase italic">XORA<span class="text-indigo-400">BOT</span></h1>
         </div>
-        <a href="#ekle" class="glass px-8 py-3 rounded-full text-sm font-bold border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all shadow-lg shadow-indigo-500/10 uppercase tracking-widest">Sunucu Ekle</a>
+        <a href="ekle.html" class="glass px-8 py-3 rounded-full text-sm font-bold border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all shadow-lg shadow-indigo-500/10 uppercase tracking-widest">Sunucu Ekle</a>
     </nav>
 
     <div class="text-center mb-20 px-4">
@@ -185,36 +185,6 @@ IP: play.novacraft.tr / novacraft.tr</p>
             </div>
     </main>
 
-    <section id="ekle" class="max-w-3xl mx-auto px-6 pb-20">
-        <div class="glass p-10 md:p-16 rounded-[40px] border-t border-white/10 relative shadow-2xl overflow-hidden">
-            <div class="absolute bottom-0 right-0 w-64 h-64 bg-purple-600/5 rounded-full blur-3xl"></div>
-            
-            <div class="relative z-10">
-                <h2 class="text-4xl font-black text-white mb-2 italic">REKLAM VER</h2>
-                <p class="text-slate-500 mb-10 font-bold uppercase tracking-widest text-xs">Sunucunu dakikalar içinde ekle</p>
-
-                <form action="https://formspree.io/f/mojnqbza" method="POST" class="grid gap-6">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <input type="text" name="name" placeholder="Sunucu Adı" required 
-                        class="bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 transition-all font-bold">
-                        
-                        <input type="url" name="link" placeholder="Discord Linki" required 
-                        class="bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 transition-all font-bold">
-                    </div>
-                    
-                    <textarea name="desc" rows="4" placeholder="Sunucunu anlatan en havalı cümleler..." required 
-                    class="bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 transition-all font-bold"></textarea>
-                    
-                    <input type="hidden" name="_replyto" value="trproadana99@gmail.com">
-
-                    <button type="submit" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black py-6 rounded-2xl uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:brightness-110 active:scale-95 transition-all">
-                        Listeye Ekleme Başvurusu Yap(Eklenmesi bir kaç saat sürebilir)
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
     <footer class="text-center py-10 opacity-30 text-[10px] font-black uppercase tracking-[0.5em] text-white">
         &copy; 2026 HZ.EXILE DESING
     </footer>
@@ -236,17 +206,12 @@ async function checkVersion() {
   }
 }
 
-// Sayfa ilk açıldığında
 checkVersion();
-
-// Arka plandan geri gelince
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden) {
     checkVersion();
   }
 });
-
-// 15 saniyede bir kontrol (arka planda da çalışır)
 setInterval(checkVersion, 15000);
 </script>
 </body>
