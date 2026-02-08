@@ -185,6 +185,36 @@ IP: play.novacraft.tr / novacraft.tr</p>
     <footer class="text-center py-10 opacity-30 text-[10px] font-black uppercase tracking-[0.5em] text-white">
         &copy; 2026 HZ.EXILE DESING
     </footer>
+<script>
+let currentVersion = null;
 
+async function checkVersion() {
+  try {
+    const res = await fetch('/version.json', { cache: 'no-store' });
+    const data = await res.json();
+
+    if (currentVersion && currentVersion !== data.version) {
+      location.reload();
+    }
+
+    currentVersion = data.version;
+  } catch (e) {
+    console.error("Version check failed");
+  }
+}
+
+// Sayfa ilk açıldığında
+checkVersion();
+
+// Arka plandan geri gelince
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    checkVersion();
+  }
+});
+
+// 15 saniyede bir kontrol (arka planda da çalışır)
+setInterval(checkVersion, 15000);
+</script>
 </body>
 </html>
