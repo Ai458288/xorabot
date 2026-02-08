@@ -1,0 +1,21 @@
+<input id="key" placeholder="Key gir">
+<button onclick="giris()">Giriş</button>
+<p id="sonuc"></p>
+
+<script>
+async function giris() {
+  const key = document.getElementById("key").value;
+  const r = await fetch(`/api/key?key=${key}`);
+  const d = await r.json();
+
+  if (d.success) {
+    localStorage.setItem("user", d.user);
+    location.href = "xora.html";
+  } else {
+    document.getElementById("sonuc").innerText =
+      d.reason === "ip"
+        ? "❌ Key başka IP’de"
+        : "❌ Geçersiz key";
+  }
+}
+</script>
