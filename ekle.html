@@ -18,22 +18,6 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        /* Dosya yükleme kutusunu özelleştirme */
-        input[type="file"]::file-selector-button {
-            background: rgba(99, 102, 241, 0.2);
-            color: #a5b4fc;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-right: 15px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        input[type="file"]::file-selector-button:hover {
-            background: #4f46e5;
-            color: white;
-        }
     </style>
 </head>
 <body class="text-slate-200 p-4">
@@ -51,22 +35,20 @@
             </p>
 
             <form id="ekleForm" action="https://formspree.io/f/mojnqbza" method="POST" enctype="multipart/form-data" class="grid gap-6">
-                
                 <div class="grid md:grid-cols-2 gap-6">
                     <input type="text" name="server_name" placeholder="Sunucu Adı" required 
                     class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all">
                     
                     <div class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-center">
-                        <label class="text-[10px] font-bold text-indigo-400 uppercase mb-2 ml-1">Sunucu Logosu (PNG/JPG)</label>
-                        <input type="file" name="upload_photo" accept="image/*" required 
-                        class="text-xs text-slate-400 outline-none">
+                        <label class="text-[10px] font-bold text-indigo-400 uppercase mb-1">Sunucu Logosu</label>
+                        <input type="file" id="fileInput" accept="image/*" required class="text-xs text-slate-400 outline-none">
                     </div>
                 </div>
                 
                 <input type="url" name="discord_link" placeholder="Discord Kalıcı Davet Linki" required 
                 class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all">
                 
-                <textarea name="description" rows="3" placeholder="Sunucu açıklaması nedir?" required 
+                <textarea name="description" rows="3" placeholder="Sunucu açıklaması..." required 
                 class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all"></textarea>
 
                 <div class="flex justify-center">
@@ -86,8 +68,9 @@
 
     <script>
         const form = document.getElementById('ekleForm');
-        const limitText = document.getElementById('limit-text');
         const submitBtn = document.getElementById('submitBtn');
+        const fileInput = document.getElementById('fileInput');
+        const limitText = document.getElementById('limit-text');
 
         let count = localStorage.getItem('submitCount') || 0;
         updateLimitUI();
@@ -99,15 +82,37 @@
                 submitBtn.disabled = true;
                 submitBtn.innerText = "BAŞVURU SINIRINA ULAŞILDI";
                 submitBtn.classList.replace('bg-gradient-to-r', 'bg-slate-800');
-                submitBtn.style.opacity = "0.5";
             }
+        }
+
+        async function compressImage(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 500;
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        canvas.toBlob((blob) => {
+                            resolve(blob);
+                        }, 'image/jpeg', 0.7);
+                    };
+                };
+            });
         }
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             if (count >= 3) {
-                alert("Üzgünüz, cihaz başı 3 sunucu sınırına ulaştınız.");
+                alert("Üzgünüz, cihaz başı sınır doldu.");
                 return;
             }
 
@@ -117,22 +122,31 @@
                 return;
             }
 
-            submitBtn.innerText = "DOSYALAR YÜKLENİYOR...";
+            submitBtn.innerText = "İŞLENİYOR VE GÖNDERİLİYOR...";
             submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+            
+            // Görsel Sıkıştırma İşlemi
+            const originalFile = fileInput.files[0];
+            if (originalFile) {
+                const compressedBlob = await compressImage(originalFile);
+                formData.set('upload_photo', compressedBlob, "sunucu-logosu.jpg");
+            }
 
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: new FormData(form),
+                body: formData,
                 headers: { 'Accept': 'application/json' }
             });
 
             if (response.ok) {
                 count++;
                 localStorage.setItem('submitCount', count);
-                alert("Başvurunuz ve fotoğrafınız başarıyla alındı!");
+                alert("Başarıyla gönderildi! Fotoğrafınız işlendi.");
                 window.location.href = "index.html";
             } else {
-                alert("Bir hata oluştu (Dosya boyutu çok büyük olabilir). Tekrar deneyin.");
+                alert("Hata oluştu. Formspree dosya yükleme limitini kontrol edin.");
                 submitBtn.innerText = "BAŞVURUYU TAMAMLA";
                 submitBtn.disabled = false;
                 grecaptcha.reset();
