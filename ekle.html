@@ -30,33 +30,34 @@
     <main class="max-w-2xl mx-auto mt-10">
         <div class="glass p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden border border-white/5">
             <h2 class="text-4xl font-black text-white mb-2 italic uppercase leading-none">REKLAM VER</h2>
-            <p id="limit-text" class="text-slate-500 mb-10 font-bold uppercase tracking-widest text-[10px] underline decoration-indigo-500/30">
+            <p id="limit-text" class="text-slate-500 mb-6 font-bold uppercase tracking-widest text-[10px]">
                 Kalan Başvuru Hakkın: 3
             </p>
 
-            <form id="ekleForm" action="https://formspree.io/f/mojnqbza" method="POST" enctype="multipart/form-data" class="grid gap-6">
+            <form id="ekleForm" action="https://formspree.io/f/mojnqbza" method="POST" class="grid gap-6">
+                
                 <div class="grid md:grid-cols-2 gap-6">
-                    <input type="text" name="server_name" placeholder="Sunucu Adı" required 
-                    class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all">
+                    <input type="text" name="Sunucu_Adi" placeholder="Sunucu Adı" required 
+                    class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm">
                     
-                    <div class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-center">
-                        <label class="text-[10px] font-bold text-indigo-400 uppercase mb-1">Sunucu Logosu</label>
-                        <input type="file" id="fileInput" accept="image/*" required class="text-xs text-slate-400 outline-none">
-                    </div>
+                    <input type="url" name="Logo_Link" placeholder="Logo Link (İsteğe Bağlı)" 
+                    class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm">
                 </div>
+
+                <p class="text-[9px] text-slate-500 -mt-4 ml-2 uppercase font-bold">* Logo linki vermezseniz standart bir ikon kullanılacaktır.</p>
                 
-                <input type="url" name="discord_link" placeholder="Discord Kalıcı Davet Linki" required 
-                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all">
+                <input type="url" name="Davet_Linki" placeholder="Discord Kalıcı Davet Linki" required 
+                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm">
                 
-                <textarea name="description" rows="3" placeholder="Sunucu açıklaması..." required 
-                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all"></textarea>
+                <textarea name="Aciklama" rows="3" placeholder="Sunucu açıklaması..." required 
+                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm"></textarea>
 
                 <div class="flex justify-center">
                     <div class="g-recaptcha" data-sitekey="6LetoGUsAAAAAN0peBbA0nN0O0NqmpIi4kUpvfwY" data-theme="dark"></div>
                 </div>
 
-                <button type="submit" id="submitBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black py-6 rounded-2xl uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
-                    Başvuruyu Tamamla
+                <button type="submit" id="submitBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black py-6 rounded-2xl uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:scale-[1.02] active:scale-95 transition-all mt-4 text-sm">
+                    Başvuruyu Gönder
                 </button>
             </form>
         </div>
@@ -69,7 +70,6 @@
     <script>
         const form = document.getElementById('ekleForm');
         const submitBtn = document.getElementById('submitBtn');
-        const fileInput = document.getElementById('fileInput');
         const limitText = document.getElementById('limit-text');
 
         let count = localStorage.getItem('submitCount') || 0;
@@ -80,76 +80,39 @@
             limitText.innerText = `Kalan Başvuru Hakkın: ${kalan}`;
             if (count >= 3) {
                 submitBtn.disabled = true;
-                submitBtn.innerText = "BAŞVURU SINIRINA ULAŞILDI";
-                submitBtn.classList.replace('bg-gradient-to-r', 'bg-slate-800');
+                submitBtn.innerText = "SINIR DOLDU";
+                submitBtn.style.opacity = "0.5";
             }
-        }
-
-        async function compressImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 500;
-                        const scaleSize = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        canvas.toBlob((blob) => {
-                            resolve(blob);
-                        }, 'image/jpeg', 0.7);
-                    };
-                };
-            });
         }
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            if (count >= 3) {
-                alert("Üzgünüz, cihaz başı sınır doldu.");
-                return;
-            }
+            if (count >= 3) return;
 
             const captchaResponse = grecaptcha.getResponse();
             if (!captchaResponse) {
-                alert("Lütfen robot olmadığınızı doğrulayın.");
+                alert("Lütfen robot doğrulamasını yapın.");
                 return;
             }
 
-            submitBtn.innerText = "İŞLENİYOR VE GÖNDERİLİYOR...";
+            submitBtn.innerText = "GÖNDERİLİYOR...";
             submitBtn.disabled = true;
-
-            const formData = new FormData(form);
-            
-            // Görsel Sıkıştırma İşlemi
-            const originalFile = fileInput.files[0];
-            if (originalFile) {
-                const compressedBlob = await compressImage(originalFile);
-                formData.set('upload_photo', compressedBlob, "sunucu-logosu.jpg");
-            }
 
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: formData,
+                body: new FormData(form),
                 headers: { 'Accept': 'application/json' }
             });
 
             if (response.ok) {
                 count++;
                 localStorage.setItem('submitCount', count);
-                alert("Başarıyla gönderildi! Fotoğrafınız işlendi.");
+                alert("Başvuru başarıyla iletildi!");
                 window.location.href = "index.html";
             } else {
-                alert("Hata oluştu. Formspree dosya yükleme limitini kontrol edin.");
-                submitBtn.innerText = "BAŞVURUYU TAMAMLA";
+                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+                submitBtn.innerText = "BAŞVURUYU GÖNDER";
                 submitBtn.disabled = false;
-                grecaptcha.reset();
             }
         });
     </script>
