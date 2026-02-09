@@ -18,38 +18,59 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        /* Dosya yükleme kutusunu özelleştirme */
+        input[type="file"]::file-selector-button {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-right: 15px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background: #4f46e5;
+            color: white;
+        }
     </style>
 </head>
 <body class="text-slate-200 p-4">
 
     <nav class="max-w-3xl mx-auto flex justify-between items-center py-8">
         <a href="index.html" class="text-sm font-bold text-indigo-400 hover:text-white transition-all">← GERİ GİT</a>
-        <h1 class="text-xl font-black italic uppercase tracking-tighter">Ad<span class="text-indigo-400">Vibe</span></h1>
+        <h1 class="text-xl font-black italic uppercase tracking-tighter text-white">Ad<span class="text-indigo-400">Vibe</span></h1>
     </nav>
 
     <main class="max-w-2xl mx-auto mt-10">
-        <div class="glass p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden">
+        <div class="glass p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden border border-white/5">
             <h2 class="text-4xl font-black text-white mb-2 italic uppercase leading-none">REKLAM VER</h2>
             <p id="limit-text" class="text-slate-500 mb-10 font-bold uppercase tracking-widest text-[10px] underline decoration-indigo-500/30">
                 Kalan Başvuru Hakkın: 3
             </p>
 
-            <form id="ekleForm" action="https://formspree.io/f/mojnqbza" method="POST" class="grid gap-6">
+            <form id="ekleForm" action="https://formspree.io/f/mojnqbza" method="POST" enctype="multipart/form-data" class="grid gap-6">
+                
                 <div class="grid md:grid-cols-2 gap-6">
-                    <input type="text" name="name" placeholder="Sunucu Adı" required 
+                    <input type="text" name="server_name" placeholder="Sunucu Adı" required 
                     class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all">
                     
-                    <input type="url" name="link" placeholder="Discord Linki" required 
-                    class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all">
+                    <div class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-center">
+                        <label class="text-[10px] font-bold text-indigo-400 uppercase mb-2 ml-1">Sunucu Logosu (PNG/JPG)</label>
+                        <input type="file" name="upload_photo" accept="image/*" required 
+                        class="text-xs text-slate-400 outline-none">
+                    </div>
                 </div>
                 
-                <textarea name="desc" rows="4" placeholder="Sunucu açıklaması..." required 
+                <input type="url" name="discord_link" placeholder="Discord Kalıcı Davet Linki" required 
+                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all">
+                
+                <textarea name="description" rows="3" placeholder="Sunucu açıklaması nedir?" required 
                 class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all"></textarea>
 
-                <input type="hidden" name="_replyto" value="trproadana99@gmail.com">
-
                 <div class="flex justify-center">
-                    <div class="g-recaptcha" data-sitekey="6Ley12QsAAAAAGeiT4Ga2yT_2MybwDuCLd34S3QH" data-theme="dark"></div>
+                    <div class="g-recaptcha" data-sitekey="6Lcu1GQsAAAAAFJsSdkdP_m-VuZDSxo4bn5Jdf2J" data-theme="dark"></div>
                 </div>
 
                 <button type="submit" id="submitBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black py-6 rounded-2xl uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
@@ -85,21 +106,18 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // 1. Hak Kontrolü
             if (count >= 3) {
                 alert("Üzgünüz, cihaz başı 3 sunucu sınırına ulaştınız.");
                 return;
             }
 
-            // 2. reCAPTCHA Kontrolü
             const captchaResponse = grecaptcha.getResponse();
             if (!captchaResponse) {
                 alert("Lütfen robot olmadığınızı doğrulayın.");
                 return;
             }
 
-            // 3. Gönderim İşlemi
-            submitBtn.innerText = "GÖNDERİLİYOR...";
+            submitBtn.innerText = "DOSYALAR YÜKLENİYOR...";
             submitBtn.disabled = true;
 
             const response = await fetch(form.action, {
@@ -111,10 +129,10 @@
             if (response.ok) {
                 count++;
                 localStorage.setItem('submitCount', count);
-                alert("Başvurunuz başarıyla alındı! Maksimum 24 saat içinde eklenecektir.");
+                alert("Başvurunuz ve fotoğrafınız başarıyla alındı!");
                 window.location.href = "index.html";
             } else {
-                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+                alert("Bir hata oluştu (Dosya boyutu çok büyük olabilir). Tekrar deneyin.");
                 submitBtn.innerText = "BAŞVURUYU TAMAMLA";
                 submitBtn.disabled = false;
                 grecaptcha.reset();
