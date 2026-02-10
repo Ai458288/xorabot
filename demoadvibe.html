@@ -300,7 +300,27 @@ Site Linki https://mexestore.netlify.app/</p>
 
     <script>
 
-// Elecus Studio
+async function discordCek(id, elementId) {
+    const el = document.getElementById(elementId);
+    if(!el) return; // Eğer HTML'de bu ID yoksa durur.
+
+    try {
+        const res = await fetch(`https://discord.com/api/guilds/${id}/widget.json`);
+        
+        if (!res.ok) {
+            el.innerText = "WIDGET KAPALI"; // Ayar kapalıysa buraya düşer
+            return;
+        }
+
+        const data = await res.json();
+        el.innerText = data.presence_count + " AKTİF ÜYE";
+    } catch (e) {
+        el.innerText = "HATA OLUŞTU";
+        console.error("Discord Veri Hatası:", e);
+    }
+}
+
+// Uygula
 discordCek('1470113199226491162', 'elecus-status');
 
 // Başka bir sunucu eklediğinde (Örnek)
