@@ -11,6 +11,10 @@
             font-family: 'Poppins', sans-serif; 
             background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617);
             min-height: 100vh;
+            /* Resimlerin seçilmesini engeller */
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         .glass {
             background: rgba(255, 255, 255, 0.03);
@@ -25,6 +29,12 @@
             transform: translateY(-5px);
             border-color: rgba(99, 102, 241, 0.5);
         }
+        /* Görsellerin sürüklenmesini ve sağ tık menüsünü engellemek için stil */
+        img {
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -33,7 +43,7 @@
         .floating { animation: float 4s ease-in-out infinite; }
     </style>
 </head>
-<body class="text-slate-200 overflow-x-hidden">
+<body class="text-slate-200 overflow-x-hidden" oncontextmenu="return false;">
 
     <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
         <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 rounded-full blur-[120px]"></div>
@@ -205,6 +215,12 @@
     </footer>
 
     <script>
+        // Sağ tıklamayı ve görsel sürüklemeyi JS ile de garantiye alalım
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('dragstart', event => event.preventDefault());
+        });
+
         let currentVersion = null;
         async function checkVersion() {
             try {
