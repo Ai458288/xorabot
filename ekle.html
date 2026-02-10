@@ -18,6 +18,10 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        .guide-step {
+            border-left: 2px solid #6366f1;
+            padding-left: 1rem;
+        }
     </style>
 </head>
 <body class="text-slate-200 p-4">
@@ -28,7 +32,7 @@
     </nav>
 
     <main class="max-w-2xl mx-auto mt-10">
-        <div class="glass p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden border border-white/5">
+        <div class="glass p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden border border-white/5 mb-8">
             <h2 class="text-4xl font-black text-white mb-2 italic uppercase leading-none">REKLAM VER</h2>
             <p id="limit-text" class="text-slate-500 mb-6 font-bold uppercase tracking-widest text-[10px]">
                 Kalan Başvuru Hakkın: 3
@@ -60,6 +64,32 @@
                     Başvuruyu Gönder
                 </button>
             </form>
+        </div>
+
+        <div class="glass p-8 rounded-[40px] border border-white/5">
+            <h3 class="text-xl font-black text-white mb-6 italic uppercase">Üye Sayısı Görünmesi İçin (Rehber)</h3>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h4 class="text-xs font-black text-indigo-400 uppercase tracking-widest">💻 PC (Masaüstü)</h4>
+                    <div class="guide-step">
+                        <p class="text-[11px] leading-relaxed">Sunucu Ayarları > <b class="text-white">Widget</b> yolunu izle.</p>
+                    </div>
+                    <div class="guide-step">
+                        <p class="text-[11px] leading-relaxed"><b class="text-white">Sunucu Widget'ını Etkinleştir</b> butonunu aktif et.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-xs font-black text-purple-400 uppercase tracking-widest">📱 MOBİL (Telefon)</h4>
+                    <div class="guide-step">
+                        <p class="text-[11px] leading-relaxed">Sunucu simgesine bas, <b class="text-white">Ayarlar</b>'a gir.</p>
+                    </div>
+                    <div class="guide-step">
+                        <p class="text-[11px] leading-relaxed"><b class="text-white">Widget</b> kısmına gir ve ayarı aktif et.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
