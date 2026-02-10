@@ -123,22 +123,30 @@
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card satis topluluk yazilim relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM+</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1456643636199428129/a_f59b7ca3016ac1611920568c4296d27b.webp?size=128" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Elecus Studio</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">Projelerimizi takip etmek, özel roller kazanmak ve devasa bir topluluğun parçası olmak için hemen aramıza katıl!</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#SATIŞ #Yazılım</div>
-                    <a href="https://discord.gg/bdfd" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
+            <div class="glass card-glow p-8 rounded-[32px] server-card satis oyun yazilim relative overflow-hidden group">
+    <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
+    <div class="flex justify-between items-start mb-6">
+        <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
+        <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+        <img src="https://cdn.discordapp.com/icons/1456643636199428129/a_f59b7ca3016ac1611920568c4296d27b.webp?size=128" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
+        <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Elecus Studio</h3>
+    </div>
+    <p class="text-slate-400 mb-8 leading-relaxed">Projelerimizi takip etmek, özel roller kazanmak ve devasa bir topluluğun parçası olmak için hemen aramıza katıl!</p>
+    <div class="flex items-center justify-between">
+        <div class="flex flex-col">
+            <div class="text-sm font-bold text-slate-500 uppercase">#SATIŞ #Oyun #Yazılım</div>
+            
+            <div class="flex items-center gap-2 mt-2 bg-emerald-500/10 w-fit px-2 py-1 rounded-lg border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span id="elecus-status" class="text-[10px] font-black text-emerald-400 uppercase tracking-tighter">YÜKLENİYOR...</span>
             </div>
+        </div>
+        <a href="https://discord.gg/bdfd" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
+    </div>
+</div>
+
 
             <div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
                 <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
@@ -291,6 +299,17 @@ Site Linki https://mexestore.netlify.app/</p>
     </footer>
 
     <script>
+
+// Elecus Studio
+discordCek('1470113199226491162', 'elecus-status');
+
+// Başka bir sunucu eklediğinde (Örnek)
+discordCek('DIGER_SUNUCU_ID', 'diger-sunucu-status');
+
+// Bir tane daha
+discordCek('UCUNCU_SUNUCU_ID', 'ucuncu-status');
+
+        
         function filterServers(category) {
             const cards = document.querySelectorAll('.server-card');
             const btns = document.querySelectorAll('.filter-btn');
