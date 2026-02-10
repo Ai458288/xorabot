@@ -96,6 +96,7 @@
     <div class="max-w-6xl mx-auto px-6 mb-12 flex flex-wrap justify-center gap-3">
         <button onclick="filterServers('all')" class="filter-btn active-btn">HEPSİ</button>
         <button onclick="filterServers('destek')" class="filter-btn border-indigo-500/50 text-indigo-400">DESTEK</button>
+        <button onclick="filterServers('satis')" class="filter-btn border-emerald-500/30 text-emerald-400">SATIŞ</button>
         <button onclick="filterServers('oyun')" class="filter-btn">OYUN</button>
         <button onclick="filterServers('yazilim')" class="filter-btn">YAZILIM</button>
         <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY</button>
@@ -122,7 +123,7 @@
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card topluluk yazilim relative overflow-hidden group">
+            <div class="glass card-glow p-8 rounded-[32px] server-card satis oyun yazilim relative overflow-hidden group">
                 <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
                 <div class="flex justify-between items-start mb-6">
                     <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
@@ -134,12 +135,12 @@
                 </div>
                 <p class="text-slate-400 mb-8 leading-relaxed">Projelerimizi takip etmek, özel roller kazanmak ve devasa bir topluluğun parçası olmak için hemen aramıza katıl!</p>
                 <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#Topluluk #Yazılım</div>
+                    <div class="text-sm font-bold text-slate-500 uppercase">#SATIŞ #Oyun #Yazılım</div>
                     <a href="https://discord.gg/bdfd" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
+            <div class="glass card-glow p-8 rounded-[32px] server-card rp relative overflow-hidden group">
                 <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
                 <div class="flex justify-between items-start mb-6">
                     <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
@@ -156,7 +157,7 @@
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card yazilim relative overflow-hidden group">
+            <div class="glass card-glow p-8 rounded-[32px] server-card yazilim topluluk relative overflow-hidden group">
                 <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
                 <div class="flex justify-between items-start mb-6">
                     <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
@@ -173,7 +174,7 @@
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
+            <div class="glass card-glow p-8 rounded-[32px] server-card rp relative overflow-hidden group">
                 <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
                 <div class="flex justify-between items-start mb-6">
                     <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
@@ -190,7 +191,7 @@
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
+            <div class="glass card-glow p-8 rounded-[32px] server-card rp relative overflow-hidden group">
                 <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
                 <div class="flex justify-between items-start mb-6">
                     <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">VİP</span>
@@ -255,7 +256,9 @@
 
             btns.forEach(btn => {
                 btn.classList.remove('active-btn');
+                // Tümü kontrolü
                 if (category === 'all' && btn.innerText === 'HEPSİ') btn.classList.add('active-btn');
+                // Diğer butonların kontrolü
                 if (btn.innerText.toLowerCase() === category) btn.classList.add('active-btn');
             });
 
