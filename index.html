@@ -119,6 +119,11 @@
                 <p class="text-slate-400 mb-8 leading-relaxed">Destek sunucusu; sunucunuzun sürekli üstte durmasını istiyorsanız gelin!!</p>
                 <div class="flex items-center justify-between">
                     <div class="text-sm font-bold text-slate-500 uppercase">#Destek Sunucusu</div>
+                    <div class="flex items-center gap-2 mt-2 bg-emerald-500/10 w-fit px-2 py-1 rounded-lg border border-emerald-500/20">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                        <span id="advibe-status" class="text-[10px] font-black text-emerald-400 uppercase tracking-tighter italic">YÜKLENİYOR...</span>
+                    </div>
+                </div>
                     <a href="https://discord.gg/pfN3uEPqNy" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
                 </div>
             </div>
@@ -353,6 +358,36 @@ Site Linki https://mexestore.netlify.app/</p>
     </footer>
 
     <script>
+
+async function discordCek(id, elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            // Proxy kullanarak tarayıcı engelini aşıyoruz
+            const proxy = "https://api.allorigins.win/get?url=";
+            const target = encodeURIComponent(`https://discord.com/api/guilds/${id}/widget.json`);
+
+            try {
+                const response = await fetch(proxy + target);
+                if (!response.ok) throw new Error();
+                const json = await response.json();
+                const data = JSON.parse(json.contents);
+
+                if (data && data.presence_count !== undefined) {
+                    el.innerText = data.presence_count + " AKTİF ÜYE";
+                } else {
+                    el.innerText = "WIDGET KAPALI";
+                }
+            } catch (err) {
+                el.innerText = "BAĞLANTI YOK";
+            }
+        }
+
+        // Sayfa yüklendiğinde Elecus verisini çek
+        window.addEventListener('DOMContentLoaded', () => {
+            discordCek('1470113199226491162', 'advibe-status');
+        });
+        
         function filterServers(category) {
             const cards = document.querySelectorAll('.server-card');
             const btns = document.querySelectorAll('.filter-btn');
