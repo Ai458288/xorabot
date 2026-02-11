@@ -2,56 +2,38 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdVibe | Admin Panel</title>
+    <title>Admin | AdVibe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .admin-card { border-left: 4px solid #6366f1; transition: all 0.3s; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
-    </style>
+    <style>body { font-family: 'Poppins', sans-serif; background: #020617; color: white; }.glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }</style>
 </head>
-<body class="p-4 md:p-10">
-
-    <div id="login-screen" class="fixed inset-0 z-50 bg-[#020617] flex items-center justify-center p-6">
-        <div class="glass p-10 rounded-[40px] text-center w-full max-w-sm">
-            <h2 class="text-2xl font-black mb-6 uppercase italic">Admin <span class="text-indigo-500">Panel</span></h2>
-            <input type="password" id="passInput" placeholder="Yönetici Şifresi" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl mb-4 text-center outline-none focus:border-indigo-500">
-            <button onclick="checkAdmin()" class="w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase tracking-widest">Giriş Yap</button>
+<body class="p-6">
+    <div id="login" class="fixed inset-0 bg-[#020617] flex items-center justify-center z-50">
+        <div class="glass p-10 rounded-[40px] text-center w-80">
+            <h2 class="text-xl font-black mb-4 italic uppercase italic">Admin <span class="text-indigo-500">Panel</span></h2>
+            <input type="password" id="p" placeholder="Şifre" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl mb-4 text-center outline-none">
+            <button onclick="login()" class="w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase">Giriş</button>
         </div>
     </div>
 
-    <div id="admin-panel" class="hidden max-w-6xl mx-auto">
-        
+    <div id="panel" class="hidden max-w-6xl mx-auto">
         <div class="flex justify-between items-center mb-10">
-            <h1 class="text-3xl font-black italic uppercase italic">Sistem <span class="text-indigo-500">Kontrol</span></h1>
-            <button onclick="location.href='advibe.html'" class="text-xs font-bold text-slate-500 hover:text-white uppercase tracking-widest italic underline">Siteye Dön</button>
+            <h1 class="text-2xl font-black uppercase italic italic">Sistem <span class="text-indigo-500">Yönetim</span></h1>
+            <button onclick="location.href='advibe.html'" class="text-xs font-bold underline opacity-50">Siteye Dön</button>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-10">
-            
-            <div class="space-y-4">
-                <div class="flex justify-between items-end px-2">
-                    <div>
-                        <h2 class="text-xl font-black uppercase italic text-indigo-400">Canlı Sohbet</h2>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase">Mesajları tek tek silebilirsin</p>
-                    </div>
-                    <button onclick="window.sohbetiTemizle()" class="bg-red-600/20 hover:bg-red-600 text-red-500 hover:text-white text-[10px] font-black px-4 py-2 rounded-xl transition-all border border-red-500/20">TÜMÜNÜ SİL</button>
+        <div class="grid md:grid-cols-2 gap-10">
+            <div>
+                <div class="flex justify-between mb-4">
+                    <h2 class="font-black uppercase italic italic text-indigo-400">Sohbeti Denetle</h2>
+                    <button onclick="window.clearChat()" class="text-[8px] bg-red-600 px-3 py-1 rounded-lg font-black uppercase">Sohbeti Sıfırla</button>
                 </div>
-                
-                <div id="admin-messages" class="glass rounded-[32px] h-[500px] overflow-y-auto p-6 space-y-3 border border-white/5 bg-black/40">
-                    </div>
+                <div id="m-list" class="glass rounded-[30px] h-[500px] overflow-y-auto p-4 space-y-2 border border-white/5"></div>
             </div>
-
-            <div class="space-y-4">
-                <h2 class="text-xl font-black uppercase italic text-indigo-400 px-2">Eklenen Sunucular</h2>
-                <div id="server-list" class="space-y-3">
-                    </div>
+            <div>
+                <h2 class="font-black uppercase italic italic text-indigo-400 mb-4 text-right">Sunucuları Denetle</h2>
+                <div id="s-list" class="space-y-2 text-right"></div>
             </div>
-
         </div>
     </div>
 
@@ -67,63 +49,52 @@
             storageBucket: "advibe-c61a6.firebasestorage.app",
             appId: "1:699784874039:web:192ade518091e7279757b2"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const adminSifre = "vibe2026"; // Şifren bu kanka
 
-        window.checkAdmin = function() {
-            if(document.getElementById('passInput').value === adminSifre) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                loadData();
-            } else { alert("Şifre Yanlış!"); }
+        window.login = () => {
+            if(document.getElementById('p').value === "vibe2026") {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('panel').classList.remove('hidden');
+                init();
+            }
         };
 
-        function loadData() {
-            // SUNUCULARI ÇEK
-            onValue(ref(db, 'servers'), (snap) => {
-                const list = document.getElementById('server-list');
-                list.innerHTML = "";
-                snap.forEach((child) => {
-                    const s = child.val();
-                    list.innerHTML += `
-                        <div class="glass p-5 rounded-2xl flex items-center justify-between admin-card group">
-                            <div class="flex items-center gap-4">
-                                <img src="${s.logo}" class="w-12 h-12 rounded-xl object-cover border border-white/10">
-                                <div>
-                                    <h4 class="font-black text-sm text-white">${s.ad}</h4>
-                                    <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-wider">${s.kategoriler}</p>
-                                </div>
+        function init() {
+            // SOHBET VE KRAL TACI
+            onValue(ref(db, 'global_chat'), (snap) => {
+                const ml = document.getElementById('m-list'); ml.innerHTML = "";
+                snap.forEach(c => {
+                    const d = c.val();
+                    ml.innerHTML += `
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5 flex justify-between items-center group">
+                            <div><span class="text-indigo-400 font-black text-[9px] uppercase">${d.user}</span><div class="text-[10px] text-slate-300">${d.mesaj}</div></div>
+                            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                                <button onclick="window.kral('${d.user}')" class="bg-yellow-600/20 text-yellow-500 p-1 rounded text-[8px] font-black uppercase">👑</button>
+                                <button onclick="window.kralAl('${d.user}')" class="bg-slate-600/20 text-slate-500 p-1 rounded text-[8px] font-black uppercase">✖</button>
+                                <button onclick="window.delM('${c.key}')" class="bg-red-600/20 text-red-500 p-1 rounded text-[8px] font-black uppercase italic">SİL</button>
                             </div>
-                            <button onclick="window.sunucuSil('${child.key}')" class="text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-xl text-[10px] font-black transition-all border border-red-500/20 italic">KALDIR</button>
                         </div>`;
                 });
             });
 
-            // MESAJLARI ÇEK
-            onValue(ref(db, 'global_chat'), (snap) => {
-                const msgDiv = document.getElementById('admin-messages');
-                msgDiv.innerHTML = "";
-                snap.forEach((child) => {
-                    const d = child.val();
-                    msgDiv.innerHTML += `
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5 flex justify-between items-center hover:bg-white/10 transition-all">
-                            <div class="max-w-[80%]">
-                                <div class="text-indigo-400 font-black text-[9px] uppercase tracking-tighter mb-1">${d.user}</div>
-                                <div class="text-xs text-slate-200 leading-relaxed">${d.mesaj}</div>
-                            </div>
-                            <button onclick="window.mesajSil('${child.key}')" class="bg-red-500/20 text-red-500 p-2 rounded-lg text-[9px] font-black hover:bg-red-500 hover:text-white transition-all">SİL</button>
-                        </div>`;
+            // SUNUCU
+            onValue(ref(db, 'servers'), (snap) => {
+                const sl = document.getElementById('s-list'); sl.innerHTML = "";
+                snap.forEach(c => {
+                    sl.innerHTML += `<div class="glass p-3 rounded-xl flex items-center justify-between border-r-4 border-indigo-600 italic">
+                        <button onclick="window.delS('${c.key}')" class="text-red-500 text-[8px] font-black underline italic">KALDIR</button>
+                        <span class="font-black text-xs text-white">${c.val().ad}</span>
+                    </div>`;
                 });
-                msgDiv.scrollTop = msgDiv.scrollHeight;
             });
         }
 
-        // SİLME İŞLEMLERİ
-        window.sunucuSil = (id) => { if(confirm("Bu sunucuyu listeden silmek istediğine emin misin?")) remove(ref(db, `servers/${id}`)); };
-        window.mesajSil = (id) => { remove(ref(db, `global_chat/${id}`)); };
-        window.sohbetiTemizle = () => { if(confirm("DİKKAT: Tüm sohbet geçmişi silinecek! Emin misin?")) set(ref(db, 'global_chat'), null); };
+        window.delM = (k) => remove(ref(db, `global_chat/${k}`));
+        window.delS = (k) => confirm("Sunucuyu kaldır?") && remove(ref(db, `servers/${k}`));
+        window.clearChat = () => confirm("Sohbet silinsin mi?") && set(ref(db, 'global_chat'), null);
+        window.kral = (u) => set(ref(db, `krallar/${u}`), true);
+        window.kralAl = (u) => remove(ref(db, `krallar/${u}`));
 
     </script>
 </body>
