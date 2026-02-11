@@ -7,42 +7,56 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .card-glow:hover { box-shadow: 0 0 40px rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4); }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #020617; 
+            color: white; 
+            margin: 0;
+            min-height: 100vh;
+        }
+        .glass { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .card-glow:hover { 
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.2); 
+            border-color: rgba(99, 102, 241, 0.4); 
+            transform: translateY(-5px);
+        }
+        .server-card { transition: all 0.4s ease; }
     </style>
 </head>
 <body class="p-6">
 
     <nav class="max-w-6xl mx-auto flex justify-between items-center py-10">
         <h1 class="text-3xl font-black italic uppercase tracking-tighter">Ad<span class="text-indigo-500">Vibe</span></h1>
-        <a href="ekle.html" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-2xl font-bold text-sm transition-all shadow-lg shadow-indigo-600/20">SUNUCU EKLE</a>
+        <a href="ekle.html" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-2xl font-bold text-sm transition-all shadow-lg shadow-indigo-600/20">
+            SUNUCU EKLE
+        </a>
     </nav>
-
-    <div class="max-w-6xl mx-auto mb-12 flex gap-4 overflow-x-auto pb-4">
-        <button class="bg-white/10 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest">TÜMÜ</button>
-        <button class="bg-white/5 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-slate-400">SATIŞ</button>
-        <button class="bg-white/5 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-slate-400">OYUN</button>
-    </div>
 
     <main class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-        <div class="glass card-glow p-8 rounded-[32px] server-card satis relative overflow-hidden group transition-all duration-500">
+        <div class="glass card-glow p-8 rounded-[32px] server-card satis oyun yazilim relative overflow-hidden group">
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl group-hover:bg-indigo-600/20 transition-all"></div>
+            
             <div class="flex justify-between items-start mb-6">
                 <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
                 <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
             </div>
 
             <div class="flex items-center gap-4 mb-4">
-                <img src="https://cdn.discordapp.com/icons/1456643636199428129/a_f59b7ca3016ac1611920568c4296d27b.webp?size=128" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover">
+                <img src="https://cdn.discordapp.com/icons/1456643636199428129/a_f59b7ca3016ac1611920568c4296d27b.webp?size=128" 
+                     class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
                 <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Elecus Studio</h3>
             </div>
 
-            <p class="text-slate-400 mb-8 leading-relaxed text-sm">Projelerimizi takip etmek ve topluluğa katılmak için hemen tıkla!</p>
+            <p class="text-slate-400 mb-8 leading-relaxed text-sm">Projelerimizi takip etmek, özel roller kazanmak ve topluluğa katılmak için hemen tıkla!</p>
 
             <div class="flex items-center justify-between">
                 <div class="flex flex-col">
-                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">#SATIŞ #YAZILIM</div>
+                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">#SATIŞ #OYUN #YAZILIM</div>
                     
                     <div class="flex items-center gap-2 mt-2 bg-emerald-500/10 w-fit px-2 py-1 rounded-lg border border-emerald-500/20">
                         <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
@@ -50,49 +64,49 @@
                     </div>
                 </div>
                 
-                <a href="https://discord.gg/bdfd" target="_blank" class="bg-white text-indigo-900 px-6 py-3 rounded-xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg text-xs uppercase">Katıl</a>
+                <a href="https://discord.gg/bdfd" target="_blank" 
+                   class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">
+                   KATIL
+                </a>
             </div>
         </div>
 
-        </main>
+    </main>
 
     <footer class="text-center py-20 opacity-20 text-[10px] font-black uppercase tracking-[0.5em]">
         &copy; 2026 HZ.EXILE DESIGN
     </footer>
 
     <script>
+        // Sunucu verilerini çeken ana fonksiyon
         async function discordCek(id, elementId) {
             const el = document.getElementById(elementId);
             if (!el) return;
 
-            // Discord'un tarayıcı engelini aşmak için proxy kullanıyoruz
-            const proxyUrl = 'https://api.allorigins.win/get?url=';
-            const targetUrl = encodeURIComponent(`https://discord.com/api/guilds/${id}/widget.json`);
+            // Proxy kullanarak tarayıcı engelini aşıyoruz
+            const proxy = "https://api.allorigins.win/get?url=";
+            const target = encodeURIComponent(`https://discord.com/api/guilds/${id}/widget.json`);
 
             try {
-                const response = await fetch(`${proxyUrl}${targetUrl}`);
-                const result = await response.json();
-                const data = JSON.parse(result.contents);
+                const response = await fetch(proxy + target);
+                if (!response.ok) throw new Error();
+                const json = await response.json();
+                const data = JSON.parse(json.contents);
 
                 if (data && data.presence_count !== undefined) {
                     el.innerText = data.presence_count + " AKTİF ÜYE";
                 } else {
                     el.innerText = "WIDGET KAPALI";
                 }
-            } catch (error) {
+            } catch (err) {
                 el.innerText = "BAĞLANTI YOK";
-                console.error("Hata:", error);
             }
         }
 
-        // Sayfa yüklendiğinde çalıştır
-        window.onload = () => {
-            // Elecus (A-Vibe) için çek
+        // Sayfa yüklendiğinde Elecus verisini çek
+        window.addEventListener('DOMContentLoaded', () => {
             discordCek('1470113199226491162', 'elecus-status');
-            
-            // Eğer başka sunucu eklersen buraya alt alta ekleyebilirsin:
-            // discordCek('DIGER_ID', 'DIGER_SPAN_ID');
-        };
+        });
     </script>
 </body>
 </html>
