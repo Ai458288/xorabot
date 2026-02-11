@@ -3,155 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sunucu Ekle | Exile Edition</title>
+    <title>Sunucu Ekle | AdVibe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617);
-            min-height: 100vh;
-        }
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .guide-step {
-            border-left: 2px solid #6366f1;
-            padding-left: 1rem;
-        }
+        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
     </style>
 </head>
-<body class="text-slate-200 p-4">
-
-    <nav class="max-w-3xl mx-auto flex justify-between items-center py-8">
-        <a href="index.html" class="text-sm font-bold text-indigo-400 hover:text-white transition-all">← GERİ GİT</a>
-        <h1 class="text-xl font-black italic uppercase tracking-tighter text-white">Ad<span class="text-indigo-400">Vibe</span></h1>
-    </nav>
-
-    <main class="max-w-2xl mx-auto mt-10">
-        <div class="glass p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden border border-white/5 mb-8">
-            <h2 class="text-4xl font-black text-white mb-2 italic uppercase leading-none">REKLAM VER</h2>
-            <p id="limit-text" class="text-slate-500 mb-6 font-bold uppercase tracking-widest text-[10px]">
-                Kalan Başvuru Hakkın: 3
-            </p>
-
-            <form id="ekleForm" action="https://formspree.io/f/mojnqbza" method="POST" class="grid gap-6">
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <input type="text" name="Sunucu_Adi" placeholder="Sunucu Adı" required 
-                    class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm">
-                    
-                    <input type="url" name="Logo_Link" placeholder="Logo Link (İsteğe Bağlı)" 
-                    class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm">
-                </div>
-
-                <p class="text-[9px] text-slate-500 -mt-4 ml-2 uppercase font-bold">* Logo linki vermezseniz standart bir ikon kullanılacaktır.</p>
-                
-                <input type="url" name="Davet_Linki" placeholder="Discord Kalıcı Davet Linki" required 
-                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm">
-
-                <input type="text" name="Widget_ID" placeholder="Widget JSON IPI (Widget - Üye Sayısı İçin)" 
-                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-emerald-500/50 font-bold text-white transition-all text-sm shadow-inner">
-                
-                <textarea name="Aciklama" rows="3" placeholder="Sunucu açıklaması..." required 
-                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-indigo-500 font-bold text-white transition-all text-sm"></textarea>
-
-                <div class="flex justify-center">
-                    <div class="g-recaptcha" data-sitekey="6LetoGUsAAAAAN0peBbA0nN0O0NqmpIi4kUpvfwY" data-theme="dark"></div>
-                </div>
-
-                <button type="submit" id="submitBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black py-6 rounded-2xl uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:scale-[1.02] active:scale-95 transition-all mt-4 text-sm">
-                    Başvuruyu Gönder
-                </button>
-            </form>
-        </div>
-
-        <div class="glass p-8 rounded-[40px] border border-white/5">
-            <h3 class="text-xl font-black text-white mb-2 italic uppercase">Üye Sayısı Görünmesi İçin (Rehber)</h3>
-            <p class="text-[10px] text-slate-500 mb-8 font-bold uppercase italic tracking-wider leading-relaxed">
-                * Zorunlu değildir ama eklerseniz sizin için daha yararlı. <br>
-                Amaç; Online üyelerin sayısını canlı olarak siteye aktarır.
-            </p>
+<body class="p-6">
+    <div class="max-w-2xl mx-auto glass p-10 rounded-[40px] mt-10">
+        <h2 class="text-3xl font-black mb-6 italic italic uppercase">Sunucunu <span class="text-indigo-500">Listeye Ekle</span></h2>
+        
+        <div class="space-y-4">
+            <input type="text" id="sAd" placeholder="Sunucu Adı" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-indigo-500">
+            <input type="text" id="sLogo" placeholder="Logo URL (Discord Linki)" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-indigo-500">
+            <input type="text" id="sLink" placeholder="Discord Davet Linki" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-indigo-500">
+            <textarea id="sAciklama" placeholder="Kısa Açıklama" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl h-32 outline-none focus:border-indigo-500"></textarea>
             
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="space-y-4">
-                    <h4 class="text-xs font-black text-indigo-400 uppercase tracking-widest">💻 PC (Masaüstü)</h4>
-                    <div class="guide-step">
-                        <p class="text-[11px] leading-relaxed">Sunucu Ayarları > <b class="text-white">Widget</b> yolunu izle.</p>
-                    </div>
-                    <div class="guide-step">
-                        <p class="text-[11px] leading-relaxed"><b class="text-white">Sunucu Widget'ını Etkinleştir</b> butonunu aktif et.</p>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-                    <h4 class="text-xs font-black text-purple-400 uppercase tracking-widest">📱 MOBİL (Telefon)</h4>
-                    <div class="guide-step">
-                        <p class="text-[11px] leading-relaxed">Sunucu simgesine bas, <b class="text-white">Ayarlar</b>'a gir.</p>
-                    </div>
-                    <div class="guide-step">
-                        <p class="text-[11px] leading-relaxed"><b class="text-white">Widget</b> kısmına gir ve ayarı aktif et.</p>
-                    </div>
-                </div>
+            <div class="grid grid-cols-2 gap-2 text-[10px] font-bold">
+                <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="oyun" class="cat"> OYUN</label>
+                <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="yazilim" class="cat"> YAZILIM</label>
+                <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="satis" class="cat"> SATIŞ</label>
+                <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="topluluk" class="cat"> TOPLULUK</label>
             </div>
+
+            <button onclick="sunucuGonder()" class="w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-indigo-500 transition-all">Sisteme Kaydet</button>
         </div>
-    </main>
+    </div>
 
-    <footer class="text-center py-10 opacity-30 text-[10px] font-black uppercase tracking-[0.4em] text-white">
-        &copy; 2026 HZ.EXILE DESIGN
-    </footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-    <script>
-        const form = document.getElementById('ekleForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const limitText = document.getElementById('limit-text');
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
+            authDomain: "advibe-c61a6.firebaseapp.com",
+            databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
+            projectId: "advibe-c61a6",
+            storageBucket: "advibe-c61a6.firebasestorage.app",
+            appId: "1:699784874039:web:192ade518091e7279757b2"
+        };
 
-        let count = localStorage.getItem('submitCount') || 0;
-        updateLimitUI();
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-        function updateLimitUI() {
-            let kalan = 3 - count;
-            limitText.innerText = `Kalan Başvuru Hakkın: ${kalan}`;
-            if (count >= 3) {
-                submitBtn.disabled = true;
-                submitBtn.innerText = "SINIR DOLDU";
-                submitBtn.style.opacity = "0.5";
-            }
-        }
+        window.sunucuGonder = function() {
+            const seciliKategoriler = Array.from(document.querySelectorAll('.cat:checked')).map(cb => cb.value);
+            
+            const veri = {
+                ad: document.getElementById('sAd').value,
+                logo: document.getElementById('sLogo').value,
+                link: document.getElementById('sLink').value,
+                aciklama: document.getElementById('sAciklama').value,
+                kategoriler: seciliKategoriler.join(' '),
+                onay: true // Başlangıçta direkt yayınlansın mı?
+            };
 
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if (count >= 3) return;
-
-            const captchaResponse = grecaptcha.getResponse();
-            if (!captchaResponse) {
-                alert("Lütfen robot doğrulamasını yapın.");
-                return;
-            }
-
-            submitBtn.innerText = "GÖNDERİLİYOR...";
-            submitBtn.disabled = true;
-
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
+            push(ref(db, 'servers'), veri).then(() => {
+                alert("Sunucu başarıyla eklendi kanka!");
+                window.location.href = 'advibe.html';
             });
-
-            if (response.ok) {
-                count++;
-                localStorage.setItem('submitCount', count);
-                alert("Başvuru başarıyla iletildi!");
-                window.location.href = "index.html";
-            } else {
-                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
-                submitBtn.innerText = "BAŞVURUYU GÖNDER";
-                submitBtn.disabled = false;
-            }
-        });
+        };
     </script>
 </body>
 </html>
