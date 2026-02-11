@@ -67,6 +67,8 @@
         .server-card {
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        #messages::-webkit-scrollbar { width: 4px; }
+        #messages::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.5); border-radius: 10px; }
     </style>
 </head>
 <body class="text-slate-200 overflow-x-hidden" oncontextmenu="return false;">
@@ -83,7 +85,19 @@
             </div>
             <h1 class="text-2xl font-black tracking-tighter text-white neon-text uppercase italic">Ad<span class="text-indigo-400">Vibe</span></h1>
         </div>
-        <a href="ekle.html" class="glass px-8 py-3 rounded-full text-sm font-bold border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all shadow-lg shadow-indigo-500/10 uppercase tracking-widest">Sunucu Ekle</a>
+        
+        <div class="flex items-center gap-4">
+             <div class="hidden md:flex items-center gap-2 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                </span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    İZLEYEN: <span id="online-ziyaretci" class="text-white italic">1</span>
+                </span>
+            </div>
+            <a href="ekle.html" class="glass px-8 py-3 rounded-full text-sm font-bold border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all shadow-lg shadow-indigo-500/10 uppercase tracking-widest">Sunucu Ekle</a>
+        </div>
     </nav>
 
     <div class="text-center mb-10 px-4">
@@ -119,8 +133,6 @@
                 <p class="text-slate-400 mb-8 leading-relaxed">Destek sunucusu; sunucunuzun sürekli üstte durmasını istiyorsanız gelin!!</p>
                 <div class="flex items-center justify-between">
                     <div class="text-sm font-bold text-slate-500 uppercase">#Destek Sunucusu</div>
-                    
-                    
                     <a href="https://discord.gg/pfN3uEPqNy" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
                 </div>
             </div>
@@ -137,7 +149,9 @@
                 </div>
                 <p class="text-slate-400 mb-8 leading-relaxed">Projelerimizi takip etmek, özel roller kazanmak ve devasa bir topluluğun parçası olmak için hemen aramıza katıl!</p>
                 <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#SATIŞ #Yazılım</div>
+                    <div>
+                        <div class="text-sm font-bold text-slate-500 uppercase">#SATIŞ #Yazılım</div>
+                    </div>
                     <a href="https://discord.gg/bdfd" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
                 </div>
             </div>
@@ -176,263 +190,143 @@
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
+            <div id="dynamicServers" class="contents">
                 </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1469100061769076833/1283eac5827a982d66a10180d6603b03.webp?size=128" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">TAG | Turkish Forces</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">Adaletli bir kamp arıyorsan TAG burda! Ordumuzu büyütmeye var mısın?</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#ASKER #RP </div>
-                    <a href="https://discord.gg/pUsMH4Y9kb" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
 
-
-           <div class="glass card-glow p-8 rounded-[32px] server-card yazilim oyun satis relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/attachments/1435612115267489934/1470756121232019619/staff.png?ex=698c73e0&is=698b2260&hm=d4fba0123e70e0fd14a75feb1b5f86cff59fac688915729dc6e40d3c64e66a62&" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Lucille.cc</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">CraftRise ve Minecraft için üretilmiş 3. parti yazılımlar!</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#YAZILIM #HİLE #OYUN </div>
-                    <a href="https://discord.gg/wtVu4MRgtd" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div> 
-
-            <div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">VİP</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1423956995861647433/7523e10abec3c295f7dc0e952ccada96.webp" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">UTAF | Turkish Armed</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">Askeri disiplin ve roleplay keyfi bir arada.</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#ASKER #RP</div>
-                    <a href="https://discord.gg/hvkkspGr82" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-            <div class="glass card-glow p-8 rounded-[32px] server-card yazilim satis relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">AKTİF</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1415029914813468704/8b79e5ee2339abbff38a4af6a6ebb469.webp" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Raven Hosting</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">Kaliteli ve ucuz Sanal Sunucular için en doğru adres!</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#HOSTİNG #YAZILIM</div>
-                    <a href="https://discord.gg/h2XQpQRmQ5" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-            <div class="glass card-glow p-8 rounded-[32px] server-card oyun topluluk relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">AKTİF</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1458120823897329849/d30877f150f35aaf32d4b366b9c2376e.webp" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Nova Craft</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">Minecraft eğlencesinin tek adresi Nova Craft!</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#MİNECRAFT #OYUN</div>
-                    <a href="https://discord.gg/novacraft" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-            <div class="glass card-glow p-8 rounded-[32px] server-card satis topluluk yazilim relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">AKTİF</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1461086543883010244/1e216dd7a4963dfc79c404e94ae16dda.webp" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">M-EXE Store</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">M-EXE STORE<br>
-
-Güvenilir • Profesyonel • Düzenli<br>
-
-M-EXE STORE, dijital ürün ve hizmetler alanında faaliyet gösteren,<br>
-güven ve şeffaflık ilkesini esas alan bir Discord sunucusudur.<br><br>
-
-Sunucumuzda;<br>
-• Aktif ve ilgili yetkili ekibi  <br>
-• Net kurallar ve düzenli sistem  <br>
-• Güvenli satış ve hizmet ortamı  <br>
-• Karşılıklı saygıya dayalı topluluk yapısı 
-ön planda tutulmaktadır.<br><br>
-
-Partnerliklerimizde amaç;
-kısa süreli reklam değil, kalıcı ve karşılıklı faydaya dayalı iş birliğidir.<br><br>
-
-Kaliteli, düzenli ve güvenilir sunucularla<br>
-uzun vadeli partnerlikler kurmayı hedefliyoruz.<br><br>
-
-Partner sunuculara destek verilir,<br>
-düzensiz ve kural dışı yapılara yer verilmez.<br><br>
-
-Site Linki https://mexestore.netlify.app/</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#SATIŞ #Yazılım</div>
-                    <a href="https://discord.gg/MVNeYDCkUz" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-<div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">AKTİF</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1430569901311135777/b1604ef5e3fbd2922d31afe7bf7cc142.webp" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">TAO TÜRK ASKER OYUNU RP</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">TÜRK ASKER OYUNUDUR!</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#ASKER #RP </div>
-                    <a href="https://discord.gg/8AnVJsYcaQ" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-</div>
-
-
-
-<div class="glass card-glow p-8 rounded-[32px] server-card oyun topluluk relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">AKTİF</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/attachments/1467100199037173946/1470877490636394648/1769440334218.png?ex=698ce4e9&is=698b9369&hm=c34aec9e4c663e318f21fda2e1d2a19796296f6e4c9ff3f453983523b347f880&" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">CostomSmp</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">👑 Costomsmp Sunucu 👑<br>
-------------------------------------<br>
-⚡ Minecraft Server<br>
-⚡ Oyunlar<br>
-⚡ 7/24 destek<br>
-⚡ Full yönetim<br>
-⚡ Kalitenin adresi<br>
-------------------------------------</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#MİNECRAFT #OYUN</div>
-                    <a href="https://discord.gg/ECkhsPCMEC" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-
-            
         </div>
     </main>
+
+    <div class="fixed bottom-6 right-6 z-50">
+        <button onclick="window.toggleChat()" class="bg-indigo-600 w-14 h-14 rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 transition-all border border-white/20">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+        </button>
+        <div id="chat-box" class="hidden absolute bottom-20 right-0 w-80 h-[400px] glass rounded-[30px] flex flex-col border border-white/10 shadow-2xl overflow-hidden">
+            <div class="p-4 bg-white/5 border-b border-white/10 font-black text-[10px] uppercase text-indigo-400 tracking-widest flex justify-between">
+                <span>Global Chat</span>
+                <span id="chat-user-display" class="text-slate-500 italic text-[8px]"></span>
+            </div>
+            <div id="messages" class="flex-1 p-4 overflow-y-auto space-y-3"></div>
+            <div class="p-4 bg-white/5 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Mesaj yaz..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs outline-none focus:border-indigo-500 transition-all">
+                <button onclick="window.mesajGonder()" class="bg-indigo-600 px-4 rounded-xl text-[10px] font-black uppercase">GÖNDER</button>
+            </div>
+        </div>
+    </div>
 
     <footer class="text-center py-10 opacity-30 text-[10px] font-black uppercase tracking-[0.5em] text-white">
         &copy; 2026 HZ.EXILE DESIGN
     </footer>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-async function discordCek(id, elementId) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
+            authDomain: "advibe-c61a6.firebaseapp.com",
+            databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
+            projectId: "advibe-c61a6",
+            storageBucket: "advibe-c61a6.firebasestorage.app",
+            appId: "1:699784874039:web:192ade518091e7279757b2"
+        };
 
-            // Proxy kullanarak tarayıcı engelini aşıyoruz
-            const proxy = "https://api.allorigins.win/get?url=";
-            const target = encodeURIComponent(`https://discord.com/api/guilds/${id}/widget.json`);
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-            try {
-                const response = await fetch(proxy + target);
-                if (!response.ok) throw new Error();
-                const json = await response.json();
-                const data = JSON.parse(json.contents);
+        // NİCKNAME & GİRİŞ KONTROL
+        const savedNick = localStorage.getItem('advibe_nick');
+        if(!savedNick) window.location.href = 'index.html';
+        document.getElementById('chat-user-display').innerText = "@" + savedNick;
 
-                if (data && data.presence_count !== undefined) {
-                    el.innerText = data.presence_count + " AKTİF ÜYE";
-                } else {
-                    el.innerText = "WIDGET KAPALI";
-                }
-            } catch (err) {
-                el.innerText = "BAĞLANTI YOK";
+        // 1. ZİYARETÇİ SAYACI
+        const onlineRef = ref(db, 'online_ziyaretci');
+        const myStatusRef = push(onlineRef);
+        onDisconnect(myStatusRef).remove();
+        set(myStatusRef, true);
+        onValue(onlineRef, (snap) => { document.getElementById('online-ziyaretci').innerText = snap.size || 1; });
+
+        // 2. SOHBET SİSTEMİ
+        const chatRef = ref(db, 'global_chat');
+        window.toggleChat = () => document.getElementById('chat-box').classList.toggle('hidden');
+        window.mesajGonder = () => {
+            const input = document.getElementById('chat-input');
+            if(input.value.trim()){
+                push(chatRef, { user: savedNick, mesaj: input.value, zaman: serverTimestamp() });
+                input.value = "";
             }
-        }
-
-        // Sayfa yüklendiğinde Elecus verisini çek
-        window.addEventListener('DOMContentLoaded', () => {
-            discordCek('1470113199226491162', 'advibe-status');
+        };
+        onValue(query(chatRef, limitToLast(25)), (snap) => {
+            const msgDiv = document.getElementById('messages');
+            msgDiv.innerHTML = "";
+            snap.forEach(c => {
+                const d = c.val();
+                msgDiv.innerHTML += `<div class="bg-white/5 p-3 rounded-2xl border border-white/5"><div class="text-indigo-400 font-black text-[9px] uppercase mb-1">${d.user}</div><div class="text-xs text-slate-200">${d.mesaj}</div></div>`;
+            });
+            msgDiv.scrollTop = msgDiv.scrollHeight;
         });
-        
+
+        // 3. DİNAMİK SUNUCULARI ÇEKME
+        onValue(ref(db, 'servers'), (snapshot) => {
+            const dynamicDiv = document.getElementById('dynamicServers');
+            dynamicDiv.innerHTML = "";
+            snapshot.forEach((child) => {
+                const s = child.val();
+                dynamicDiv.innerHTML += `
+                    <div class="glass card-glow p-8 rounded-[32px] server-card all ${s.kategoriler} relative overflow-hidden group">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">AKTİF</span>
+                            <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="${s.logo}" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
+                            <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">${s.ad}</h3>
+                        </div>
+                        <p class="text-slate-400 mb-8 leading-relaxed text-sm">${s.aciklama}</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase italic">#${s.kategoriler.replace(/ /g, " #")}</div>
+                            <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 shadow-lg uppercase text-xs">KATIL</a>
+                        </div>
+                    </div>`;
+            });
+        });
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') window.mesajGonder(); });
+    </script>
+
+    <script>
+        // FILTRELEME VE DISCORD API
         function filterServers(category) {
             const cards = document.querySelectorAll('.server-card');
             const btns = document.querySelectorAll('.filter-btn');
-
             btns.forEach(btn => {
                 btn.classList.remove('active-btn');
-                // Tümü kontrolü
                 if (category === 'all' && btn.innerText === 'HEPSİ') btn.classList.add('active-btn');
-                // Diğer butonların kontrolü
                 if (btn.innerText.toLowerCase() === category) btn.classList.add('active-btn');
             });
-
             cards.forEach(card => {
                 card.style.opacity = '0';
                 card.style.transform = 'scale(0.95)';
-
                 setTimeout(() => {
                     if (category === 'all' || card.classList.contains(category)) {
                         card.style.display = 'block';
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'scale(1)';
-                        }, 50);
-                    } else {
-                        card.style.display = 'none';
-                    }
+                        setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
+                    } else { card.style.display = 'none'; }
                 }, 300);
             });
         }
 
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.querySelectorAll('img').forEach(img => {
-            img.addEventListener('dragstart', event => event.preventDefault());
-        });
-
-        let currentVersion = null;
-        async function checkVersion() {
+        async function discordCek(id, elementId) {
+            const el = document.getElementById(elementId);
             try {
-                const res = await fetch('/version.json', { cache: 'no-store' });
-                const data = await res.json();
-                if (currentVersion && currentVersion !== data.version) {
-                    location.reload();
-                }
-                currentVersion = data.version;
-            } catch (e) {}
+                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://discord.com/api/guilds/${id}/widget.json`)}`);
+                const json = await res.json();
+                const data = JSON.parse(json.contents);
+                el.innerText = (data.presence_count || 0) + " AKTİF ÜYE";
+            } catch (e) { el.innerText = "BAĞLANTI YOK"; }
         }
-        checkVersion();
-        setInterval(checkVersion, 15000);
+
+        window.addEventListener('DOMContentLoaded', () => { discordCek('1470113199226491162', 'advibe-status'); });
+        document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
 </body>
 </html>
