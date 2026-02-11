@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | AdVibe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="p-8">
+    <div id="login-screen" class="fixed inset-0 z-50 bg-[#020617] flex items-center justify-center">
+        <div class="glass p-10 rounded-[40px] text-center w-full max-w-sm">
+            <h2 class="text-2xl font-black mb-6 uppercase italic">Admin <span class="text-indigo-500">Girişi</span></h2>
+            <input type="password" id="passInput" placeholder="Yönetim Şifresi" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl mb-4 text-center outline-none focus:border-indigo-500">
+            <button onclick="checkAdmin()" class="w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase">Giriş Yap</button>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="hidden max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <h1 class="text-4xl font-black italic uppercase">Sunucu <span class="text-indigo-500">Yönetimi</span></h1>
+            <button onclick="location.href='advibe.html'" class="text-xs font-bold text-slate-500 hover:text-white">SİTEYE DÖN</button>
+        </div>
+
+        <div id="server-list" class="grid gap-4">
+            </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
+            authDomain: "advibe-c61a6.firebaseapp.com",
+            databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
+            projectId: "advibe-c61a6",
+            storageBucket: "advibe-c61a6.firebasestorage.app",
+            appId: "1:699784874039:web:192ade518091e7279757b2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const adminSifre = "vibe2026"; // BURADAN ŞİFREYİ DEĞİŞTİR KANKA
+
+        window.checkAdmin = function() {
+            const val = document.getElementById('passInput').value;
+            if(val === adminSifre) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                loadServers();
+            } else {
+                alert("Şifre yanlış kanka!");
+            }
+        };
+
+        function loadServers() {
+            const sRef = ref(db, 'servers');
+            onValue(sRef, (snap) => {
+                const list = document.getElementById('server-list');
+                list.innerHTML = "";
+                snap.forEach((child) => {
+                    const data = child.val();
+                    const key = child.key;
+                    list.innerHTML += `
+                        <div class="glass p-6 rounded-3xl flex items-center justify-between border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-4">
+                                <img src="${data.logo}" class="w-12 h-12 rounded-xl object-cover">
+                                <div>
+                                    <h4 class="font-bold text-white">${data.ad}</h4>
+                                    <p class="text-[10px] text-slate-500 uppercase">${data.kategoriler}</p>
+                                </div>
+                            </div>
+                            <button onclick="window.sil('${key}')" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-6 py-2 rounded-xl text-xs font-black transition-all">SİL</button>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        window.sil = function(id) {
+            if(confirm("Bu sunucuyu listeden atmak istediğine emin misin?")) {
+                remove(ref(db, `servers/${id}`));
+            }
+        };
+    </script>
+</body>
+</html>
