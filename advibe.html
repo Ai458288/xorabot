@@ -218,80 +218,98 @@
     </footer>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, query, limitToLast, serverTimestamp, onDisconnect, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
-            authDomain: "advibe-c61a6.firebaseapp.com",
-            databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
-            projectId: "advibe-c61a6",
-            storageBucket: "advibe-c61a6.firebasestorage.app",
-            appId: "1:699784874039:web:192ade518091e7279757b2"
-        };
+    // 1. FIREBASE BAĞLANTISI
+    const firebaseConfig = {
+        apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
+        authDomain: "advibe-c61a6.firebaseapp.com",
+        databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
+        projectId: "advibe-c61a6",
+        storageBucket: "advibe-c61a6.firebasestorage.app",
+        appId: "1:699784874039:web:192ade518091e7279757b2"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    // 2. KULLANICI VE SAYAÇ SİSTEMİ
+    const savedNick = localStorage.getItem('advibe_nick') || "Misafir";
+    document.getElementById('chat-nick').innerText = "@" + savedNick;
 
-        // NİCKNAME & GİRİŞ KONTROL
-        const savedNick = localStorage.getItem('advibe_nick');
-        if(!savedNick) window.location.href = 'index.html';
-        document.getElementById('chat-user-display').innerText = "@" + savedNick;
+    const onlineRef = ref(db, 'online_ziyaretci');
+    const myStatusRef = push(onlineRef);
+    onDisconnect(myStatusRef).remove();
+    set(myStatusRef, true);
+    onValue(onlineRef, (s) => document.getElementById('online-ziyaretci').innerText = s.size || 1);
 
-        // 1. ZİYARETÇİ SAYACI
-        const onlineRef = ref(db, 'online_ziyaretci');
-        const myStatusRef = push(onlineRef);
-        onDisconnect(myStatusRef).remove();
-        set(myStatusRef, true);
-        onValue(onlineRef, (snap) => { document.getElementById('online-ziyaretci').innerText = snap.size || 1; });
-
-        // 2. SOHBET SİSTEMİ
-        const chatRef = ref(db, 'global_chat');
-        window.toggleChat = () => document.getElementById('chat-box').classList.toggle('hidden');
-        window.mesajGonder = () => {
-            const input = document.getElementById('chat-input');
-            if(input.value.trim()){
-                push(chatRef, { user: savedNick, mesaj: input.value, zaman: serverTimestamp() });
-                input.value = "";
-            }
-        };
-        onValue(query(chatRef, limitToLast(25)), (snap) => {
-            const msgDiv = document.getElementById('messages');
-            msgDiv.innerHTML = "";
+    // 3. KRAL TACI DESTEKLİ SOHBET
+    const chatRef = ref(db, 'global_chat');
+    onValue(query(chatRef, limitToLast(25)), (snap) => {
+        onValue(ref(db, 'krallar'), (kralSnap) => {
+            const krallar = kralSnap.val() || {};
+            const m = document.getElementById('messages'); 
+            m.innerHTML = "";
             snap.forEach(c => {
                 const d = c.val();
-                msgDiv.innerHTML += `<div class="bg-white/5 p-3 rounded-2xl border border-white/5"><div class="text-indigo-400 font-black text-[9px] uppercase mb-1">${d.user}</div><div class="text-xs text-slate-200">${d.mesaj}</div></div>`;
-            });
-            msgDiv.scrollTop = msgDiv.scrollHeight;
-        });
-
-        // 3. DİNAMİK SUNUCULARI ÇEKME
-        onValue(ref(db, 'servers'), (snapshot) => {
-            const dynamicDiv = document.getElementById('dynamicServers');
-            dynamicDiv.innerHTML = "";
-            snapshot.forEach((child) => {
-                const s = child.val();
-                dynamicDiv.innerHTML += `
-                    <div class="glass card-glow p-8 rounded-[32px] server-card all ${s.kategoriler} relative overflow-hidden group">
-                        <div class="flex justify-between items-start mb-6">
-                            <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">AKTİF</span>
-                            <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
+                const tac = krallar[d.user] ? " 👑" : ""; 
+                m.innerHTML += `
+                    <div class="bg-white/5 p-3 rounded-2xl border border-white/5 shadow-sm">
+                        <div class="text-indigo-400 font-black text-[9px] uppercase mb-1">
+                            ${d.user}${tac}
                         </div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <img src="${s.logo}" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                            <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">${s.ad}</h3>
-                        </div>
-                        <p class="text-slate-400 mb-8 leading-relaxed text-sm">${s.aciklama}</p>
-                        <div class="flex items-center justify-between">
-                            <div class="text-[10px] font-bold text-slate-500 uppercase italic">#${s.kategoriler.replace(/ /g, " #")}</div>
-                            <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 shadow-lg uppercase text-xs">KATIL</a>
-                        </div>
+                        <div class="text-xs text-slate-200">${d.mesaj}</div>
                     </div>`;
             });
+            m.scrollTop = m.scrollHeight;
         });
+    });
 
-        document.getElementById('chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') window.mesajGonder(); });
-    </script>
+    window.sendMsg = () => {
+        const i = document.getElementById('chat-input');
+        if(i.value.trim()){ 
+            push(chatRef, { 
+                user: savedNick, 
+                mesaj: i.value, 
+                zaman: serverTimestamp() 
+            }); 
+            i.value = ""; 
+        }
+    };
+
+    // 4. OTOMATİK SUNUCU ÇEKME (FİLTRE UYUMLU)
+    onValue(ref(db, 'servers'), (snapshot) => {
+        const dynamicDiv = document.getElementById('dynamicServers');
+        dynamicDiv.innerHTML = ""; 
+        snapshot.forEach((child) => {
+            const s = child.val();
+            dynamicDiv.innerHTML += `
+                <div class="glass p-8 rounded-[32px] server-card all ${s.kategoriler} relative overflow-hidden group border border-white/5">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-emerald-500/20 italic">AKTİF</span>
+                        <div class="text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="${s.logo}" class="w-16 h-16 rounded-2xl border border-white/10 object-cover shadow-lg" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                        <h3 class="text-2xl font-black text-white group-hover:text-indigo-400 transition">${s.ad}</h3>
+                    </div>
+                    <p class="text-slate-400 mb-8 text-sm h-12 overflow-hidden opacity-80">${s.aciklama}</p>
+                    <div class="flex items-center justify-between">
+                        <div class="text-[10px] font-bold text-slate-600 uppercase italic">
+                            #${s.kategoriler ? s.kategoriler.replace(/ /g, " #") : 'Genel'}
+                        </div>
+                        <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-3 rounded-xl font-black transition-all hover:scale-105 uppercase text-xs">KATIL</a>
+                    </div>
+                </div>`;
+        });
+    });
+
+    // Enter ile mesaj gönderme
+    document.getElementById('chat-input').addEventListener('keypress', (e) => { 
+        if(e.key === 'Enter') window.sendMsg(); 
+    });
+</script>
+
 
     <script>
         // FILTRELEME VE DISCORD API
