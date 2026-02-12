@@ -83,24 +83,26 @@
             let servers = []; snap.forEach(c => { servers.push({id: c.key, ...c.val()}); });
             servers.sort((a,b) => (a.sira || 99) - (b.sira || 99));
 
-            // onValue içindeki kart yapısını şu şekilde güncelle:
-servers.forEach(s => {
-    div.innerHTML += `
-        <div class="glass p-8 rounded-[35px] server-card border border-white/5">
-            <div class="flex justify-between items-center">
-                <div class="flex flex-col">
-                    <span class="text-[9px] font-bold text-slate-500 uppercase italic">#${s.kategoriler}</span>
-                    <div class="flex items-center gap-1 mt-1">
-                        <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                        <span class="text-[8px] font-black text-emerald-400">AKTİF</span>
-                    </div>
-                </div>
-                
-                <a href="server.html?id=${s.id}" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase hover:bg-white hover:text-indigo-900 transition-all">İNCELE</a>
-            </div>
-        </div>`;
-});
-
+            servers.forEach(s => {
+                grid.innerHTML += `
+                    <div class="glass p-8 rounded-[35px] border border-white/5 server-card all ${s.kategoriler}">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase italic">${s.tag || 'YENİ'}</span>
+                            <div class="flex gap-4">
+                                <button onclick="oyVer('${s.id}', 'like')" class="text-[10px] font-bold text-emerald-400 uppercase">👍 Beğeni: ${s.likes || 0}</button>
+                                <button onclick="oyVer('${s.id}', 'dislike')" class="text-[10px] font-bold text-red-400 uppercase">👎 Kötü: ${s.dislikes || 0}</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="${s.logo}" class="w-16 h-16 rounded-2xl border border-white/10">
+                            <h3 class="text-2xl font-black">${s.ad}</h3>
+                        </div>
+                        <p class="text-slate-400 mb-6 text-sm h-12 overflow-hidden">${s.aciklama}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[9px] font-bold text-slate-500 uppercase italic">#${s.kategoriler}</span>
+                            <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-3 rounded-xl font-black text-xs uppercase">KATIL</a>
+                        </div>
+                    </div>`;
             });
         });
     </script>
