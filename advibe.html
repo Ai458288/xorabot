@@ -7,21 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; -webkit-user-select: none; user-select: none; }
+        body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); min-height: 100vh; color: white; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 24px; border-radius: 16px; font-size: 11px; font-weight: 900; text-transform: uppercase; color: #94a3b8; transition: 0.3s; }
+        .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 24px; border-radius: 16px; font-size: 11px; font-weight: 900; text-transform: uppercase; color: #94a3b8; transition: all 0.3s ease; }
         .active-btn { background: #4f46e5 !important; color: white !important; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <nav class="max-w-6xl mx-auto flex justify-between items-center p-6 mb-10">
-        <div class="flex items-center gap-3">
-            <h1 class="text-2xl font-black italic uppercase">Ad<span class="text-indigo-400">Vibe</span></h1>
-            <div class="bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 ml-4">
-                <span id="onlineCount" class="text-[10px] font-black text-emerald-400 uppercase tracking-tighter">0 İZLEYİCİ</span>
-            </div>
-        </div>
+        <h1 class="text-2xl font-black italic uppercase italic">Ad<span class="text-indigo-400">Vibe</span></h1>
         <a href="ekle.html" class="glass px-8 py-3 rounded-full text-sm font-bold border border-indigo-500/30 text-indigo-300 uppercase">Sunucu Ekle</a>
     </nav>
 
@@ -30,27 +25,18 @@
         <button onclick="filterServers('destek')" class="filter-btn">DESTEK</button>
         <button onclick="filterServers('satis')" class="filter-btn">SATIŞ</button>
         <button onclick="filterServers('oyun')" class="filter-btn">OYUN</button>
+        <button onclick="filterServers('yazilim')" class="filter-btn">YAZILIM</button>
         <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY</button>
     </div>
 
-    <main class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row gap-10 pb-20">
-        <div id="dynamicServers" class="flex-1 grid gap-8 grid-cols-1">
+    <main class="max-w-6xl mx-auto px-6 pb-20">
+        <div id="serverGrid" class="grid gap-8 md:grid-cols-2">
             </div>
-
-        <div class="w-full lg:w-80 space-y-4">
-            <div class="glass rounded-[35px] p-6 border border-white/5 flex flex-col h-[500px]">
-                <div id="chatBox" class="flex-1 overflow-y-auto space-y-4 mb-4 pr-2"></div>
-                <div class="relative">
-                    <input type="text" id="chatInput" placeholder="Mesaj yaz..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-xs">
-                    <button onclick="sendMsg()" class="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-500 font-bold">OK</button>
-                </div>
-            </div>
-        </div>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, onValue, get, set, push, runTransaction, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+        import { getDatabase, ref, onValue, update, runTransaction, get, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
@@ -63,78 +49,57 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // İZLEYİCİ SAYISI
-        const onlineRef = ref(db, 'online_users');
-        const myStatus = push(onlineRef);
-        onDisconnect(myStatus).remove();
-        set(myStatus, true);
-        onValue(onlineRef, (snap) => {
-            document.getElementById('onlineCount').innerText = snap.numChildren() + " İZLEYİCİ";
-        });
-
-        // OY VERME (IP KONTROLLÜ)
+        // OY VERME FONKSİYONU
         window.oyVer = async (id, tip) => {
             const res = await fetch('https://api.ipify.org?format=json');
             const data = await res.json();
             const ip = data.ip.replace(/\./g, '_');
+            
             const voteRef = ref(db, `votes/${id}/${ip}`);
-            const currentVote = await get(voteRef);
+            const serverRef = ref(db, `servers/${id}`);
+            const snapshot = await get(voteRef);
 
-            if (currentVote.exists() && currentVote.val() === tip) {
-                alert("Zaten oy verdin!"); return;
+            if (snapshot.exists() && snapshot.val() === tip) {
+                alert("Kanka zaten oy vermişsin!"); return;
             }
 
-            runTransaction(ref(db, `servers/${id}`), (s) => {
+            runTransaction(serverRef, (s) => {
                 if (s) {
                     if (!s.likes) s.likes = 0; if (!s.dislikes) s.dislikes = 0;
-                    if (tip === 'like') { s.likes++; if(currentVote.val()==='dislike') s.dislikes--; }
-                    else { s.dislikes++; if(currentVote.val()==='like') s.likes--; }
+                    if (tip === 'like') {
+                        s.likes++;
+                        if (snapshot.val() === 'dislike') s.dislikes--;
+                    } else {
+                        s.dislikes++;
+                        if (snapshot.val() === 'like') s.likes--;
+                    }
                 }
                 return s;
             }).then(() => set(voteRef, tip));
         };
 
-        // SOHBET (Index.html'den gelen isimle)
-        const myName = localStorage.getItem('vibe_user') || "Anonim";
-        window.sendMsg = () => {
-            const msg = document.getElementById('chatInput').value;
-            if(!msg) return;
-            push(ref(db, 'global_chat'), { user: myName, mesaj: msg, zaman: serverTimestamp() });
-            document.getElementById('chatInput').value = "";
-        };
-
-        onValue(ref(db, 'global_chat'), (snap) => {
-            const box = document.getElementById('chatBox'); box.innerHTML = "";
-            snap.forEach(c => {
-                const m = c.val();
-                box.innerHTML += `<div><span class="text-[10px] font-black text-indigo-400 uppercase">${m.user}:</span><p class="text-[11px] text-slate-300">${m.mesaj}</p></div>`;
-            });
-            box.scrollTop = box.scrollHeight;
-        });
-
-        // SUNUCULARI LİSTELE
         onValue(ref(db, 'servers'), (snap) => {
-            const div = document.getElementById('dynamicServers'); div.innerHTML = "";
-            let servers = []; snap.forEach(c => { servers.push({ id: c.key, ...c.val() }); });
+            const grid = document.getElementById('serverGrid'); grid.innerHTML = "";
+            let servers = []; snap.forEach(c => { servers.push({id: c.key, ...c.val()}); });
             servers.sort((a,b) => (a.sira || 99) - (b.sira || 99));
 
             servers.forEach(s => {
-                div.innerHTML += `
-                    <div class="glass p-8 rounded-[35px] server-card all ${s.kategoriler}">
+                grid.innerHTML += `
+                    <div class="glass p-8 rounded-[35px] border border-white/5 server-card all ${s.kategoriler}">
                         <div class="flex justify-between items-start mb-6">
                             <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase italic">${s.tag || 'YENİ'}</span>
                             <div class="flex gap-4">
-                                <button onclick="oyVer('${s.id}', 'like')" class="text-[10px] font-black text-emerald-400">👍 Beğeni: ${s.likes || 0}</button>
-                                <button onclick="oyVer('${s.id}', 'dislike')" class="text-[10px] font-black text-red-400">👎 Kötü: ${s.dislikes || 0}</button>
+                                <button onclick="oyVer('${s.id}', 'like')" class="text-[10px] font-bold text-emerald-400 uppercase">👍 Beğeni: ${s.likes || 0}</button>
+                                <button onclick="oyVer('${s.id}', 'dislike')" class="text-[10px] font-bold text-red-400 uppercase">👎 Kötü: ${s.dislikes || 0}</button>
                             </div>
                         </div>
                         <div class="flex items-center gap-4 mb-4">
                             <img src="${s.logo}" class="w-16 h-16 rounded-2xl border border-white/10">
-                            <h3 class="text-2xl font-black italic uppercase">${s.ad}</h3>
+                            <h3 class="text-2xl font-black">${s.ad}</h3>
                         </div>
                         <p class="text-slate-400 mb-6 text-sm h-12 overflow-hidden">${s.aciklama}</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-bold text-slate-500 uppercase">#${s.kategoriler}</span>
+                            <span class="text-[9px] font-bold text-slate-500 uppercase italic">#${s.kategoriler}</span>
                             <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-3 rounded-xl font-black text-xs uppercase">KATIL</a>
                         </div>
                     </div>`;
