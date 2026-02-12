@@ -71,8 +71,25 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- İZLEYİCİ SAYISI (Rastgele gerçekçi simülasyon) ---
-        document.getElementById('onlineCount').innerText = Math.floor(Math.random() * (45 - 18) + 18) + " İZLEYİCİ";
+        // --- GERÇEK İZLEYİCİ SAYISI (Firebase Presence) ---
+import { onDisconnect, push, onValue as onValueDB } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+// 1. Bu kullanıcı için eşsiz bir online kaydı oluştur
+const onlineStatusRef = ref(db, 'online_users');
+const myStatusRef = push(onlineStatusRef);
+
+// 2. Kullanıcı sayfadan ayrıldığında (sekme kapandığında) kaydı otomatik sil
+onDisconnect(myStatusRef).remove();
+
+// 3. Kaydı şimdi oluştur (siteye girdi)
+set(myStatusRef, { last_active: serverTimestamp() });
+
+// 4. Toplam online sayısını dinle ve ekrana yazdır
+onValueDB(onlineStatusRef, (snap) => {
+    const count = snap.numChildren(); // Veritabanındaki aktif kayıt sayısı
+    document.getElementById('onlineCount').innerText = count + " CANLI İZLEYİCİ";
+});
+
 
         // --- OY VERME SİSTEMİ ---
         window.oyVer = async (id, tip) => {
