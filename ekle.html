@@ -13,7 +13,7 @@
 </head>
 <body class="p-6">
     <div class="max-w-2xl mx-auto glass p-10 rounded-[40px] mt-10">
-        <h2 class="text-3xl font-black mb-6 italic italic uppercase">Sunucunu <span class="text-indigo-500">Listeye Ekle</span></h2>
+        <h2 class="text-3xl font-black mb-6 italic uppercase">Sunucunu <span class="text-indigo-500">Listeye Ekle</span></h2>
         
         <div class="space-y-4">
             <input type="text" id="sAd" placeholder="Sunucu Adı" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-indigo-500">
@@ -26,7 +26,8 @@
                 <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="yazilim" class="cat"> YAZILIM</label>
                 <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="satis" class="cat"> SATIŞ</label>
                 <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="topluluk" class="cat"> TOPLULUK</label>
-                      <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="rp" class="cat"> RP[ROLEPLAY]</label>
+                <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="rp" class="cat"> RP[ROLEPLAY]</label>
+                <label class="flex items-center gap-2 bg-white/5 p-3 rounded-xl cursor-pointer"><input type="checkbox" value="destek" class="cat"> DESTEK</label>
             </div>
 
             <button onclick="sunucuGonder()" class="w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-indigo-500 transition-all">Sisteme Kaydet</button>
@@ -35,7 +36,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+        import { getDatabase, ref, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
@@ -50,20 +51,35 @@
         const db = getDatabase(app);
 
         window.sunucuGonder = function() {
+            const ad = document.getElementById('sAd').value;
+            const logo = document.getElementById('sLogo').value;
+            const link = document.getElementById('sLink').value;
+            const aciklama = document.getElementById('sAciklama').value;
+            
+            // Seçili kategorileri al ve boşlukla birleştir
             const seciliKategoriler = Array.from(document.querySelectorAll('.cat:checked')).map(cb => cb.value);
             
+            if(!ad || !link) {
+                alert("Lütfen en azından sunucu adını ve linkini gir kanka!");
+                return;
+            }
+
             const veri = {
-                ad: document.getElementById('sAd').value,
-                logo: document.getElementById('sLogo').value,
-                link: document.getElementById('sLink').value,
-                aciklama: document.getElementById('sAciklama').value,
-                kategoriler: seciliKategoriler.join(' '),
-                onay: true // Başlangıçta direkt yayınlansın mı?
+                ad: ad,
+                logo: logo || "https://cdn.discordapp.com/embed/avatars/0.png",
+                link: link,
+                aciklama: aciklama || "Harika bir topluluk!",
+                kategoriler: seciliKategoriler.length > 0 ? seciliKategoriler.join(' ') : 'topluluk', // Boşsa 'topluluk' ata
+                tag: "YENİ", // Otomatik Tag
+                sira: 99,    // Otomatik en sona at (Yönetimden düzeltebilirsin)
+                zaman: serverTimestamp()
             };
 
             push(ref(db, 'servers'), veri).then(() => {
-                alert("Sunucu başarıyla eklendi kanka!");
+                alert("Sunucu başarıyla eklendi! Şimdi listede en sonda göreceksin.");
                 window.location.href = 'advibe.html';
+            }).catch((error) => {
+                alert("Hata oluştu kanka: " + error.message);
             });
         };
     </script>
