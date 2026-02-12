@@ -23,19 +23,22 @@
 
     <div id="panel" class="hidden max-w-7xl mx-auto">
         <header class="flex justify-between items-center mb-10 bg-white/5 p-6 rounded-[30px] border border-white/5">
-            <h1 class="text-2xl font-black uppercase italic text-indigo-500 tracking-tighter">AdVibe <span class="text-white">Panel</span></h1>
-            <button onclick="location.reload()" class="text-[10px] font-black bg-white/5 px-4 py-2 rounded-xl border border-white/10 uppercase">Yenile</button>
+            <h1 class="text-2xl font-black uppercase italic text-indigo-500 tracking-tighter">AdVibe <span class="text-white">Admin</span></h1>
+            <div class="flex gap-4">
+                <button onclick="location.reload()" class="text-[10px] font-black bg-white/5 px-4 py-2 rounded-xl border border-white/10 uppercase italic">Yenile</button>
+                <a href="advibe.html" class="text-[10px] font-black bg-indigo-600 px-4 py-2 rounded-xl uppercase">Siteye Git</a>
+            </div>
         </header>
 
         <div class="grid lg:grid-cols-2 gap-10">
             <div class="space-y-6">
                 <h2 class="font-black uppercase italic text-indigo-400 text-sm tracking-widest ml-2">Sohbet Denetimi</h2>
-                <div id="m-list" class="glass rounded-[35px] h-[600px] overflow-y-auto p-6 space-y-3 border border-white/5 shadow-inner">
+                <div id="m-list" class="glass rounded-[35px] h-[700px] overflow-y-auto p-6 space-y-3 border border-white/5">
                     </div>
             </div>
 
             <div class="space-y-6">
-                <h2 class="font-black uppercase italic text-indigo-400 text-sm tracking-widest ml-2">Sunucu Düzenleme</h2>
+                <h2 class="font-black uppercase italic text-indigo-400 text-sm tracking-widest ml-2">Sunucu Ayarları & Beğeni Hilesi</h2>
                 <div id="s-list" class="space-y-4">
                     </div>
             </div>
@@ -44,7 +47,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, onValue, remove, set, update } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+        import { getDatabase, ref, onValue, remove, update, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
@@ -61,12 +64,12 @@
             if(document.getElementById('pass').value === "vibe2026") {
                 document.getElementById('login').style.display = 'none';
                 document.getElementById('panel').classList.remove('hidden');
-                init();
-            } else { alert("Şifre yanlış kanka!"); }
+                loadData();
+            } else { alert("Şifre yanlış!"); }
         };
 
-        function init() {
-            // SOHBET MODERASYONU
+        function loadData() {
+            // SOHBET
             onValue(ref(db, 'global_chat'), (snap) => {
                 const ml = document.getElementById('m-list'); ml.innerHTML = "";
                 snap.forEach(c => {
@@ -78,73 +81,71 @@
                                 <div class="text-xs text-slate-300 mt-1">${d.mesaj}</div>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="window.makeKral('${d.user}')" class="bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-white px-3 py-1 rounded-lg text-[10px] font-bold transition-all border border-yellow-500/20">TAÇ</button>
-                                <button onclick="window.delMsg('${c.key}')" class="bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white px-3 py-1 rounded-lg text-[10px] font-bold transition-all border border-red-500/20">SİL</button>
+                                <button onclick="window.makeKral('${d.user}')" class="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded-lg text-[10px] font-bold border border-yellow-500/20">KRAL</button>
+                                <button onclick="window.delMsg('${c.key}')" class="bg-red-500/10 text-red-500 px-3 py-1 rounded-lg text-[10px] font-bold border border-red-500/20">SİL</button>
                             </div>
                         </div>`;
                 });
-                ml.scrollTop = ml.scrollHeight;
             });
 
-            // SUNUCU AYARLARI (KATEGORİ DÜZENLEME DAHİL)
+            // SUNUCU LİSTESİ VE HİLE PANELİ
             onValue(ref(db, 'servers'), (snap) => {
                 const sl = document.getElementById('s-list'); sl.innerHTML = "";
                 snap.forEach(c => {
                     const s = c.val();
                     sl.innerHTML += `
-                        <div class="glass p-6 rounded-[30px] border border-white/5 shadow-lg relative overflow-hidden group">
+                        <div class="glass p-6 rounded-[30px] border border-white/5 shadow-lg">
                             <div class="flex justify-between items-center mb-4">
                                 <div class="flex items-center gap-3">
-                                    <img src="${s.logo}" class="w-8 h-8 rounded-lg object-cover border border-white/10 shadow-md">
-                                    <span class="font-black text-sm uppercase italic tracking-tighter text-slate-200">${s.ad}</span>
+                                    <img src="${s.logo}" class="w-8 h-8 rounded-lg object-cover">
+                                    <span class="font-black text-sm uppercase italic">${s.ad}</span>
                                 </div>
-                                <button onclick="window.delServer('${c.key}')" class="text-red-500/50 hover:text-red-500 transition-colors text-[10px] font-black uppercase underline">Sunucuyu Kaldır</button>
+                                <button onclick="window.delServer('${c.key}')" class="text-red-500 text-[10px] font-black uppercase underline">KALDIR</button>
                             </div>
 
-                            <div class="space-y-3">
+                            <div class="grid grid-cols-2 gap-4">
                                 <div class="flex flex-col gap-1">
-                                    <label class="text-[8px] font-bold text-slate-500 ml-2 uppercase tracking-widest">Kategoriler (rp satis oyun gibi boşlukla yaz)</label>
-                                    <input type="text" id="cat-${c.key}" value="${s.kategoriler || ''}" class="bg-white/5 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-indigo-500/50 transition-all font-medium italic">
+                                    <label class="text-[8px] font-bold text-slate-500 uppercase ml-2">Kategoriler</label>
+                                    <input type="text" id="cat-${c.key}" value="${s.kategoriler || ''}" class="bg-white/5 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-indigo-500">
                                 </div>
-
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="flex flex-col gap-1">
-                                        <label class="text-[8px] font-bold text-slate-500 ml-2 uppercase tracking-widest">Özel Tag (Etiket)</label>
-                                        <input type="text" id="tag-${c.key}" value="${s.tag || ''}" class="bg-white/5 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-indigo-500/50 transition-all text-indigo-400 font-bold">
-                                    </div>
-                                    <div class="flex flex-col gap-1">
-                                        <label class="text-[8px] font-bold text-slate-500 ml-2 uppercase tracking-widest">Sıralama (1 en üst)</label>
-                                        <input type="number" id="sira-${c.key}" value="${s.sira || 99}" class="bg-white/5 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-indigo-500/50 transition-all">
-                                    </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-[8px] font-bold text-slate-500 uppercase ml-2">Özel Tag</label>
+                                    <input type="text" id="tag-${c.key}" value="${s.tag || ''}" class="bg-white/5 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-indigo-500 text-indigo-400 font-bold">
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-[8px] font-bold text-emerald-500 uppercase ml-2">👍 Beğeni Sayısı</label>
+                                    <input type="number" id="likes-${c.key}" value="${s.likes || 0}" class="bg-white/5 border border-emerald-500/20 p-3 rounded-xl text-xs outline-none focus:border-emerald-500 text-emerald-400 font-bold">
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-[8px] font-bold text-red-500 uppercase ml-2">👎 Kötü Beğeni Sayısı</label>
+                                    <input type="number" id="dislikes-${c.key}" value="${s.dislikes || 0}" class="bg-white/5 border border-red-500/20 p-3 rounded-xl text-xs outline-none focus:border-red-500 text-red-400 font-bold">
+                                </div>
+                                <div class="flex flex-col gap-1 col-span-2">
+                                    <label class="text-[8px] font-bold text-slate-500 uppercase ml-2">Sıralama (Küçük sayı üstte tutar)</label>
+                                    <input type="number" id="sira-${c.key}" value="${s.sira || 99}" class="bg-white/5 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-indigo-500">
                                 </div>
                             </div>
 
-                            <button onclick="window.updateEverything('${c.key}')" class="w-full mt-4 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white py-3 rounded-xl text-[10px] font-black uppercase transition-all border border-indigo-500/20 shadow-sm">Verileri Güncelle</button>
+                            <button onclick="window.updateServer('${c.key}')" class="w-full mt-4 bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white py-3 rounded-2xl text-[10px] font-black uppercase transition-all border border-indigo-500/30">Hepsini Güncelle</button>
                         </div>`;
                 });
             });
         }
 
-        // --- AKSİYONLAR ---
-        window.delMsg = (k) => remove(ref(db, `global_chat/${k}`));
-        window.delServer = (k) => confirm("Kanka sunucuyu listeden siliyorum, emin misin?") && remove(ref(db, `servers/${k}`));
-        window.makeKral = (u) => set(ref(db, `krallar/${u}`), true).then(() => alert(u + " artık kral! 👑"));
-        
-        // TÜMÜNÜ GÜNCELLEME (Kategori, Tag, Sıra)
-        window.updateEverything = (id) => {
-            const newCat = document.getElementById(`cat-${id}`).value.toLowerCase();
-            const newTag = document.getElementById(`tag-${id}`).value;
-            const newSira = parseInt(document.getElementById(`sira-${id}`).value);
-            
-            update(ref(db, `servers/${id}`), { 
-                kategoriler: newCat, 
-                tag: newTag, 
-                sira: newSira 
-            }).then(() => {
-                alert("Güncelleme başarılı! Sayfa anında değişti.");
-            });
-        };
+        window.delMsg = (id) => remove(ref(db, `global_chat/${id}`));
+        window.delServer = (id) => confirm("Bu sunucuyu sileyim mi kanka?") && remove(ref(db, `servers/${id}`));
+        window.makeKral = (u) => set(ref(db, `krallar/${u}`), true).then(() => alert("Kral yapıldı: " + u));
 
+        window.updateServer = (id) => {
+            const updates = {
+                kategoriler: document.getElementById(`cat-${id}`).value.toLowerCase(),
+                tag: document.getElementById(`tag-${id}`).value,
+                likes: parseInt(document.getElementById(`likes-${id}`).value) || 0,
+                dislikes: parseInt(document.getElementById(`dislikes-${id}`).value) || 0,
+                sira: parseInt(document.getElementById(`sira-${id}`).value) || 99
+            };
+            update(ref(db, `servers/${id}`), updates).then(() => alert("Veriler Başarıyla Fişeklendi! 🚀"));
+        };
     </script>
 </body>
 </html>
