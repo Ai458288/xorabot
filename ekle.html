@@ -56,7 +56,6 @@
             const link = document.getElementById('sLink').value;
             const aciklama = document.getElementById('sAciklama').value;
             
-            // Seçili kategorileri al ve boşlukla birleştir
             const seciliKategoriler = Array.from(document.querySelectorAll('.cat:checked')).map(cb => cb.value);
             
             if(!ad || !link) {
@@ -69,14 +68,16 @@
                 logo: logo || "https://cdn.discordapp.com/embed/avatars/0.png",
                 link: link,
                 aciklama: aciklama || "Harika bir topluluk!",
-                kategoriler: seciliKategoriler.length > 0 ? seciliKategoriler.join(' ') : 'topluluk', // Boşsa 'topluluk' ata
-                tag: "YENİ", // Otomatik Tag
-                sira: 99,    // Otomatik en sona at (Yönetimden düzeltebilirsin)
+                kategoriler: seciliKategoriler.length > 0 ? seciliKategoriler.join(' ') : 'topluluk',
+                tag: "YENİ",
+                sira: 99,
+                likes: 0,     // BEĞENİ BAŞLANGIÇ
+                dislikes: 0,  // KÖTÜ BEĞENİ BAŞLANGIÇ
                 zaman: serverTimestamp()
             };
 
             push(ref(db, 'servers'), veri).then(() => {
-                alert("Sunucu başarıyla eklendi! Şimdi listede en sonda göreceksin.");
+                alert("Sunucu başarıyla eklendi kanka!");
                 window.location.href = 'advibe.html';
             }).catch((error) => {
                 alert("Hata oluştu kanka: " + error.message);
