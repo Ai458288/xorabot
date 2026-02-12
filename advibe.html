@@ -26,7 +26,7 @@
         <button onclick="filterServers('satis')" class="filter-btn">SATIŞ</button>
         <button onclick="filterServers('oyun')" class="filter-btn">OYUN</button>
         <button onclick="filterServers('yazilim')" class="filter-btn">YAZILIM</button>
-        <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY</button>
+        <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY [RP]</button>
     </div>
 
     <main class="max-w-6xl mx-auto px-6 pb-20">
@@ -60,7 +60,7 @@
             const snapshot = await get(voteRef);
 
             if (snapshot.exists() && snapshot.val() === tip) {
-                alert("Kanka zaten oy vermişsin!"); return;
+                alert("Zaten oy vermişsin!"); return;
             }
 
             runTransaction(serverRef, (s) => {
