@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sunucu Detay | AdVibe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#020617] text-white font-['Poppins'] min-height-screen flex flex-col items-center p-10">
+    
+    <div id="loader" class="text-indigo-500 font-black animate-bounce">YÜKLENİYOR...</div>
+
+    <div id="content" class="hidden w-full max-w-4xl">
+        <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center gap-5">
+                <img id="sLogo" src="" class="w-24 h-24 rounded-3xl border-4 border-white/5 shadow-2xl">
+                <div>
+                    <h1 id="sAd" class="text-4xl font-black italic uppercase italic"></h1>
+                    <span class="text-emerald-500 font-black text-xs tracking-widest">● SUNUCU ŞU AN AKTİF</span>
+                </div>
+            </div>
+            <a href="advibe.html" class="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl text-xs font-black uppercase">Geri Dön</a>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-10">
+            <div class="glass p-10 rounded-[40px] bg-white/5 border border-white/10">
+                <h2 class="text-indigo-400 font-black uppercase italic mb-4">Sunucu Hakkında</h2>
+                <p id="sAciklama" class="text-slate-400 leading-relaxed"></p>
+                <a id="sLink" href="" target="_blank" class="block text-center mt-10 bg-indigo-600 py-4 rounded-2xl font-black uppercase shadow-lg shadow-indigo-600/20">Sunucuya Katıl</a>
+            </div>
+
+            <div class="glass p-5 rounded-[40px] bg-black/40 border border-white/5 flex items-center justify-center min-h-[400px]">
+                <div id="sWidgetContainer" class="w-full overflow-hidden flex justify-center">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+        const firebaseConfig = { /* SENİN FİREBASE BİLGİLERİN */ };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // URL'den sunucu ID'sini al
+        const params = new URLSearchParams(window.location.search);
+        const serverId = params.get('id');
+
+        if(serverId) {
+            get(ref(db, `servers/${serverId}`)).then((snap) => {
+                if(snap.exists()) {
+                    const s = snap.val();
+                    document.getElementById('sAd').innerText = s.ad;
+                    document.getElementById('sLogo').src = s.logo;
+                    document.getElementById('sAciklama').innerText = s.aciklama;
+                    document.getElementById('sLink').href = s.link;
+                    
+                    // WIDGET'I EKLEME
+                    if(s.widget) {
+                        document.getElementById('sWidgetContainer').innerHTML = s.widget;
+                    } else {
+                        document.getElementById('sWidgetContainer').innerHTML = "<p class='text-xs text-slate-500 uppercase'>Bu sunucu için widget eklenmemiş.</p>";
+                    }
+
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('content').classList.remove('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
