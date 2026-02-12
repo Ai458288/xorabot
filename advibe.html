@@ -3,137 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Reklam | AdVibe</title>
+    <title>AdVibe | Discord Sunucu Listesi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617);
-            min-height: 100vh;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .neon-text {
-            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
-        }
-        .card-glow:hover {
-            box-shadow: 0 0 30px rgba(79, 70, 229, 0.2);
-            transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.5);
-        }
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 24px;
-            border-radius: 16px;
-            font-size: 11px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #94a3b8;
-            transition: all 0.3s ease;
-        }
-        .active-btn {
-            background: #4f46e5 !important;
-            color: white !important;
-            border-color: #6366f1 !important;
-            box-shadow: 0 10px 20px -10px rgba(79, 70, 229, 0.6);
-        }
-        .server-card {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); min-height: 100vh; color: white; -webkit-user-select: none; user-select: none; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .neon-text { text-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+        .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 24px; border-radius: 16px; font-size: 11px; font-weight: 900; text-transform: uppercase; color: #94a3b8; transition: 0.3s; }
+        .active-btn { background: #4f46e5 !important; color: white !important; box-shadow: 0 10px 20px -10px rgba(79, 70, 229, 0.6); }
+        .server-card { transition: all 0.5s ease; }
         #messages::-webkit-scrollbar { width: 4px; }
-        #messages::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.5); border-radius: 10px; }
+        #messages::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
     </style>
 </head>
-<body class="text-slate-200 overflow-x-hidden" oncontextmenu="return false;">
-
-    <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]"></div>
-    </div>
+<body oncontextmenu="return false;">
 
     <nav class="max-w-6xl mx-auto flex justify-between items-center p-6 mb-10">
         <div class="flex items-center gap-3">
-            <div class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.5)]">
-                <span class="text-white text-2xl font-black">AV</span>
-            </div>
-            <h1 class="text-2xl font-black tracking-tighter text-white neon-text uppercase italic">Ad<span class="text-indigo-400">Vibe</span></h1>
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black">AV</div>
+            <h1 class="text-xl font-black neon-text italic uppercase">Ad<span class="text-indigo-400">Vibe</span></h1>
         </div>
-        
         <div class="flex items-center gap-4">
-             <div class="hidden md:flex items-center gap-2 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                </span>
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    İZLEYEN: <span id="online-ziyaretci" class="text-white italic">1</span>
-                </span>
-            </div>
-            <a href="ekle.html" class="glass px-8 py-3 rounded-full text-sm font-bold border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all shadow-lg shadow-indigo-500/10 uppercase tracking-widest">Sunucu Ekle</a>
+            <div class="text-[10px] font-bold text-slate-500 uppercase">İZLEYEN: <span id="online-ziyaretci" class="text-white italic">1</span></div>
+            <a href="ekle.html" class="glass px-6 py-2 rounded-full text-[10px] font-black border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all uppercase">Sunucu Ekle</a>
         </div>
     </nav>
 
-    <div class="text-center mb-10 px-4">
-        <h2 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-none uppercase">
-            SUNUCUNU <br> <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent italic">ZİRVEYE TAŞI</span>
-        </h2>
-    </div>
-
     <div class="max-w-6xl mx-auto px-6 mb-12 flex flex-wrap justify-center gap-3">
         <button onclick="filterServers('all')" class="filter-btn active-btn">HEPSİ</button>
-        <button onclick="filterServers('destek')" class="filter-btn border-indigo-500/50 text-indigo-400">DESTEK</button>
-        <button onclick="filterServers('satis')" class="filter-btn border-emerald-500/30 text-emerald-400">SATIŞ</button>
+        <button onclick="filterServers('destek')" class="filter-btn border-indigo-500/30">DESTEK</button>
+        <button onclick="filterServers('satis')" class="filter-btn border-emerald-500/30">SATIŞ</button>
         <button onclick="filterServers('oyun')" class="filter-btn">OYUN</button>
-        <button onclick="filterServers('yazilim')" class="filter-btn">YAZILIM</button>
         <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY</button>
         <button onclick="filterServers('topluluk')" class="filter-btn">TOPLULUK</button>
     </div>
 
     <main class="max-w-6xl mx-auto px-6 mb-32">
         <div id="serverGrid" class="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-
-            <div class="glass card-glow p-8 rounded-[32px] server-card destek topluluk all relative overflow-hidden group">
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">OWNER</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">🔱</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg text-white font-black">AV</div>
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">AdVibe</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">Destek sunucusu; sunucunuzun sürekli üstte durmasını istiyorsanız gelin!!</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#Destek Sunucusu</div>
-                    <a href="https://discord.gg/pfN3uEPqNy" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black shadow-lg">KATIL</a>
-                </div>
-            </div>
-
             <div id="dynamicServers" class="contents"></div>
-
         </div>
     </main>
 
     <div class="fixed bottom-6 right-6 z-50">
-        <button onclick="window.toggleChat()" class="bg-indigo-600 w-14 h-14 rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 transition-all border border-white/20">
-            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-        </button>
+        <button onclick="window.toggleChat()" class="bg-indigo-600 w-14 h-14 rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 transition-all">💬</button>
         <div id="chat-box" class="hidden absolute bottom-20 right-0 w-80 h-[400px] glass rounded-[30px] flex flex-col border border-white/10 shadow-2xl overflow-hidden">
-            <div class="p-4 bg-white/5 border-b border-white/10 font-black text-[10px] uppercase text-indigo-400 tracking-widest flex justify-between">
-                <span>Global Chat</span>
-                <span id="chat-user-display" class="text-slate-500 italic text-[8px]"></span>
-            </div>
+            <div class="p-4 bg-white/5 border-b border-white/10 font-black text-[10px] uppercase text-indigo-400 flex justify-between">Global Chat <span id="chat-user-display" class="text-slate-500 italic"></span></div>
             <div id="messages" class="flex-1 p-4 overflow-y-auto space-y-3"></div>
             <div class="p-4 bg-white/5 flex gap-2">
-                <input type="text" id="chat-input" placeholder="Mesaj yaz..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs outline-none focus:border-indigo-500">
-                <button onclick="window.mesajGonder()" class="bg-indigo-600 px-4 rounded-xl text-[10px] font-black uppercase">GÖNDER</button>
+                <input type="text" id="chat-input" placeholder="Mesaj..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs outline-none">
+                <button onclick="window.mesajGonder()" class="bg-indigo-600 px-4 rounded-xl text-[10px] font-black">GÖNDER</button>
             </div>
         </div>
     </div>
@@ -150,11 +69,9 @@
             storageBucket: "advibe-c61a6.firebasestorage.app",
             appId: "1:699784874039:web:192ade518091e7279757b2"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // NİCK VE SOHBET GÖRÜNÜMÜ
         const savedNick = localStorage.getItem('advibe_nick') || "Misafir";
         document.getElementById('chat-user-display').innerText = "@" + savedNick;
 
@@ -165,23 +82,14 @@
         set(myStatusRef, true);
         onValue(onlineRef, (s) => document.getElementById('online-ziyaretci').innerText = s.size || 1);
 
-        // CHAT BOX AÇ/KAPAT
         window.toggleChat = () => document.getElementById('chat-box').classList.toggle('hidden');
 
-        // MESAJ GÖNDERME
+        // SOHBET (KRAL TACI DAHİL)
         window.mesajGonder = () => {
             const i = document.getElementById('chat-input');
-            if(i.value.trim()){ 
-                push(ref(db, 'global_chat'), { 
-                    user: savedNick, 
-                    mesaj: i.value, 
-                    zaman: serverTimestamp() 
-                }); 
-                i.value = ""; 
-            }
+            if(i.value.trim()){ push(ref(db, 'global_chat'), { user: savedNick, mesaj: i.value, zaman: serverTimestamp() }); i.value = ""; }
         };
 
-        // MESAJLARI VE KRALLARI ÇEK
         onValue(query(ref(db, 'global_chat'), limitToLast(25)), (snap) => {
             onValue(ref(db, 'krallar'), (kralSnap) => {
                 const krallar = kralSnap.val() || {};
@@ -195,23 +103,28 @@
             });
         });
 
-        // DİNAMİK SUNUCULARI ÇEK (FİLTRE İÇİN CLASS EKLEDİM)
+        // SUNUCULARI ÇEK (SIRALAMA VE TAG DAHİL)
         onValue(ref(db, 'servers'), (snapshot) => {
             const div = document.getElementById('dynamicServers');
             div.innerHTML = ""; 
-            snapshot.forEach((child) => {
-                const s = child.val();
+            let servers = [];
+            snapshot.forEach(c => servers.push({ id: c.key, ...c.val() }));
+            
+            // Sıralama Yap (Küçük numara en başa)
+            servers.sort((a, b) => (a.sira || 99) - (b.sira || 99));
+
+            servers.forEach(s => {
                 div.innerHTML += `
-                    <div class="glass card-glow p-8 rounded-[32px] server-card all ${s.kategoriler} relative overflow-hidden group border border-white/5">
+                    <div class="glass p-8 rounded-[32px] server-card all ${s.kategoriler} relative overflow-hidden group border border-white/5">
                         <div class="flex justify-between items-start mb-6">
-                            <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-emerald-500/20 italic italic">YENİ</span>
+                            <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase italic border border-indigo-500/20">${s.tag || 'AKTİF'}</span>
                             <div class="text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
                         </div>
                         <div class="flex items-center gap-4 mb-4">
                             <img src="${s.logo}" class="w-16 h-16 rounded-2xl border border-white/10 object-cover" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                            <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">${s.ad}</h3>
+                            <h3 class="text-2xl font-black text-white group-hover:text-indigo-400 transition">${s.ad}</h3>
                         </div>
-                        <p class="text-slate-400 mb-8 text-sm h-12 overflow-hidden">${s.aciklama}</p>
+                        <p class="text-slate-400 mb-8 text-sm h-12 overflow-hidden opacity-80">${s.aciklama}</p>
                         <div class="flex items-center justify-between">
                             <div class="text-[10px] font-bold text-slate-500 uppercase italic">#${s.kategoriler.replace(/ /g, " #")}</div>
                             <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black hover:scale-105 transition-all uppercase text-xs">KATIL</a>
@@ -224,24 +137,14 @@
     </script>
 
     <script>
-        // FİLTRELEME SİSTEMİ (ONARILDI)
-        function filterServers(category) {
-            const cards = document.querySelectorAll('.server-card');
-            const btns = document.querySelectorAll('.filter-btn');
-            
-            btns.forEach(btn => {
-                btn.classList.remove('active-btn');
-                if (category === 'all' && btn.innerText === 'HEPSİ') btn.classList.add('active-btn');
-                if (btn.innerText.toLowerCase() === category) btn.classList.add('active-btn');
+        function filterServers(cat) {
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active-btn');
+                if(cat === 'all' && b.innerText === 'HEPSİ') b.classList.add('active-btn');
+                else if(b.innerText.toLowerCase() === cat) b.classList.add('active-btn');
             });
-
-            cards.forEach(card => {
-                if (category === 'all' || card.classList.contains(category)) {
-                    card.style.display = 'block';
-                    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
-                } else {
-                    card.style.display = 'none';
-                }
+            document.querySelectorAll('.server-card').forEach(c => {
+                c.style.display = (cat === 'all' || c.classList.contains(cat)) ? 'block' : 'none';
             });
         }
     </script>
