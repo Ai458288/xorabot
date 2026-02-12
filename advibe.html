@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdVibe | Sunucu Listesi</title>
+    <title>AdVibe | Discord Sunucu Listesi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -21,7 +21,7 @@
             <h1 class="text-2xl font-black italic uppercase">Ad<span class="text-indigo-500">Vibe</span></h1>
             <div class="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
                 <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span id="onlineCount" class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">0 İZLEYİCİ</span>
+                <span id="onlineCount" class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">YÜKLENİYOR...</span>
             </div>
         </div>
         <div class="flex items-center gap-3">
@@ -76,20 +76,31 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // İZLEYİCİ SAYISI
+        // --- CANLI İZLEYİCİ SAYACI GÜNCELLEMESİ ---
         const onlineRef = ref(db, 'online_users');
-        const myPresence = push(onlineRef);
-        onDisconnect(myPresence).remove();
-        set(myPresence, true);
-        onValue(onlineRef, (snap) => { document.getElementById('onlineCount').innerText = (snap.numChildren() || 0) + " İZLEYİCİ"; });
+        const connectedRef = ref(db, '.info/connected');
 
-        // SOHBET
+        onValue(connectedRef, (snap) => {
+            if (snap.val() === true) {
+                const myPresence = push(onlineRef);
+                set(myPresence, true);
+                onDisconnect(myPresence).remove();
+            }
+        });
+
+        onValue(onlineRef, (snap) => {
+            const count = snap.numChildren() || 0;
+            document.getElementById('onlineCount').innerText = count + " İZLEYİCİ";
+        });
+        // ------------------------------------------
+
         window.sendMsg = () => {
             const inp = document.getElementById('chatInput');
             if(!inp.value.trim()) return;
             push(ref(db, 'global_chat'), { user: myName, mesaj: inp.value, zaman: serverTimestamp() });
             inp.value = "";
         };
+
         onValue(ref(db, 'global_chat'), (snap) => {
             const box = document.getElementById('chatBox'); box.innerHTML = "";
             snap.forEach(c => {
@@ -99,7 +110,6 @@
             box.scrollTop = box.scrollHeight;
         });
 
-        // OY VERME & LİSTE
         window.oyVer = async (id, tip) => {
             const res = await fetch('https://api.ipify.org?format=json');
             const data = await res.json();
