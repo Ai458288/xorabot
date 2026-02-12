@@ -12,7 +12,6 @@
             background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617);
             min-height: 100vh;
             -webkit-user-select: none;
-            -ms-user-select: none;
             user-select: none;
         }
         .glass {
@@ -28,19 +27,6 @@
             transform: translateY(-5px);
             border-color: rgba(99, 102, 241, 0.5);
         }
-        img {
-            pointer-events: none;
-            -webkit-user-drag: none;
-            user-drag: none;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        .floating { animation: float 4s ease-in-out infinite; }
-
-        /* KATEGORİ BUTONLARI */
         .filter-btn {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -52,11 +38,6 @@
             letter-spacing: 2px;
             color: #94a3b8;
             transition: all 0.3s ease;
-        }
-        .filter-btn:hover {
-            background: rgba(99, 102, 241, 0.1);
-            color: white;
-            transform: translateY(-2px);
         }
         .active-btn {
             background: #4f46e5 !important;
@@ -79,7 +60,7 @@
     </div>
 
     <nav class="max-w-6xl mx-auto flex justify-between items-center p-6 mb-10">
-        <div class="flex items-center gap-3 floating">
+        <div class="flex items-center gap-3">
             <div class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.5)]">
                 <span class="text-white text-2xl font-black">AV</span>
             </div>
@@ -104,7 +85,6 @@
         <h2 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-none uppercase">
             SUNUCUNU <br> <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent italic">ZİRVEYE TAŞI</span>
         </h2>
-        <p class="text-slate-400 max-w-xl mx-auto text-lg font-medium opacity-60">Türkiye'nin en hızlı büyüyen Discord topluluk listesinde yerini al.</p>
     </div>
 
     <div class="max-w-6xl mx-auto px-6 mb-12 flex flex-wrap justify-center gap-3">
@@ -120,8 +100,7 @@
     <main class="max-w-6xl mx-auto px-6 mb-32">
         <div id="serverGrid" class="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card destek topluluk relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
+            <div class="glass card-glow p-8 rounded-[32px] server-card destek topluluk all relative overflow-hidden group">
                 <div class="flex justify-between items-start mb-6">
                     <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">OWNER</span>
                     <div class="flex gap-1 text-yellow-500 text-xs">🔱</div>
@@ -133,65 +112,11 @@
                 <p class="text-slate-400 mb-8 leading-relaxed">Destek sunucusu; sunucunuzun sürekli üstte durmasını istiyorsanız gelin!!</p>
                 <div class="flex items-center justify-between">
                     <div class="text-sm font-bold text-slate-500 uppercase">#Destek Sunucusu</div>
-                    <a href="https://discord.gg/pfN3uEPqNy" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
+                    <a href="https://discord.gg/pfN3uEPqNy" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black shadow-lg">KATIL</a>
                 </div>
             </div>
 
-            <div class="glass card-glow p-8 rounded-[32px] server-card satis topluluk yazilim relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM+</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1456643636199428129/a_f59b7ca3016ac1611920568c4296d27b.webp?size=128" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Elecus Studio</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">Projelerimizi takip etmek, özel roller kazanmak ve devasa bir topluluğun parçası olmak için hemen aramıza katıl!</p>
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="text-sm font-bold text-slate-500 uppercase">#SATIŞ #Yazılım</div>
-                    </div>
-                    <a href="https://discord.gg/bdfd" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-            <div class="glass card-glow p-8 rounded-[32px] server-card rp oyun relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/icons/1445072732130644193/b9d84f9ceaf8072aaf9c843ec4b265af.webp?size=128" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Çanakkale RP</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed text-sm">Emergency Hamburg tabanlı Roblox RP sunucumuz açılmıştır. Verify sistemi ile hızlı kayıt!</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#ROLEPLAY #RP</div>
-                    <a href="https://discord.gg/cdKtVQSh" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-            <div class="glass card-glow p-8 rounded-[32px] server-card yazilim relative overflow-hidden group">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl transition-all group-hover:bg-indigo-600/30"></div>
-                <div class="flex justify-between items-start mb-6">
-                    <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">PREMIUM</span>
-                    <div class="flex gap-1 text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://cdn.discordapp.com/avatars/1465678735180173496/2ef04b4a53af19c2f65d8041e833d7a3.png?size=2048" class="w-16 h-16 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-lg">
-                    <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">Pauchcord</h3>
-                </div>
-                <p class="text-slate-400 mb-8 leading-relaxed">4 Haneli oy ver botundan çok daha iyi! Sunucunuzu öne çıkarmak için bir numara.</p>
-                <div class="flex items-center justify-between">
-                    <div class="text-sm font-bold text-slate-500 uppercase">#OYVER #YAZILIM</div>
-                    <a href="https://discord.gg/BntWkpEHKM" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg">KATIL</a>
-                </div>
-            </div>
-
-            <div id="dynamicServers" class="contents">
-                </div>
+            <div id="dynamicServers" class="contents"></div>
 
         </div>
     </main>
@@ -207,144 +132,118 @@
             </div>
             <div id="messages" class="flex-1 p-4 overflow-y-auto space-y-3"></div>
             <div class="p-4 bg-white/5 flex gap-2">
-                <input type="text" id="chat-input" placeholder="Mesaj yaz..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs outline-none focus:border-indigo-500 transition-all">
+                <input type="text" id="chat-input" placeholder="Mesaj yaz..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs outline-none focus:border-indigo-500">
                 <button onclick="window.mesajGonder()" class="bg-indigo-600 px-4 rounded-xl text-[10px] font-black uppercase">GÖNDER</button>
             </div>
         </div>
     </div>
 
-    <footer class="text-center py-10 opacity-30 text-[10px] font-black uppercase tracking-[0.5em] text-white">
-        &copy; 2026 HZ.EXILE DESIGN
-    </footer>
-
     <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, query, limitToLast, serverTimestamp, onDisconnect, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, query, limitToLast, serverTimestamp, onDisconnect, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-    // 1. FIREBASE BAĞLANTISI
-    const firebaseConfig = {
-        apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
-        authDomain: "advibe-c61a6.firebaseapp.com",
-        databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
-        projectId: "advibe-c61a6",
-        storageBucket: "advibe-c61a6.firebasestorage.app",
-        appId: "1:699784874039:web:192ade518091e7279757b2"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
+            authDomain: "advibe-c61a6.firebaseapp.com",
+            databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
+            projectId: "advibe-c61a6",
+            storageBucket: "advibe-c61a6.firebasestorage.app",
+            appId: "1:699784874039:web:192ade518091e7279757b2"
+        };
 
-    // 2. KULLANICI VE SAYAÇ SİSTEMİ
-    const savedNick = localStorage.getItem('advibe_nick') || "Misafir";
-    document.getElementById('chat-nick').innerText = "@" + savedNick;
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-    const onlineRef = ref(db, 'online_ziyaretci');
-    const myStatusRef = push(onlineRef);
-    onDisconnect(myStatusRef).remove();
-    set(myStatusRef, true);
-    onValue(onlineRef, (s) => document.getElementById('online-ziyaretci').innerText = s.size || 1);
+        // NİCK VE SOHBET GÖRÜNÜMÜ
+        const savedNick = localStorage.getItem('advibe_nick') || "Misafir";
+        document.getElementById('chat-user-display').innerText = "@" + savedNick;
 
-    // 3. KRAL TACI DESTEKLİ SOHBET
-    const chatRef = ref(db, 'global_chat');
-    onValue(query(chatRef, limitToLast(25)), (snap) => {
-        onValue(ref(db, 'krallar'), (kralSnap) => {
-            const krallar = kralSnap.val() || {};
-            const m = document.getElementById('messages'); 
-            m.innerHTML = "";
-            snap.forEach(c => {
-                const d = c.val();
-                const tac = krallar[d.user] ? " 👑" : ""; 
-                m.innerHTML += `
-                    <div class="bg-white/5 p-3 rounded-2xl border border-white/5 shadow-sm">
-                        <div class="text-indigo-400 font-black text-[9px] uppercase mb-1">
-                            ${d.user}${tac}
+        // CANLI SAYAÇ
+        const onlineRef = ref(db, 'online_ziyaretci');
+        const myStatusRef = push(onlineRef);
+        onDisconnect(myStatusRef).remove();
+        set(myStatusRef, true);
+        onValue(onlineRef, (s) => document.getElementById('online-ziyaretci').innerText = s.size || 1);
+
+        // CHAT BOX AÇ/KAPAT
+        window.toggleChat = () => document.getElementById('chat-box').classList.toggle('hidden');
+
+        // MESAJ GÖNDERME
+        window.mesajGonder = () => {
+            const i = document.getElementById('chat-input');
+            if(i.value.trim()){ 
+                push(ref(db, 'global_chat'), { 
+                    user: savedNick, 
+                    mesaj: i.value, 
+                    zaman: serverTimestamp() 
+                }); 
+                i.value = ""; 
+            }
+        };
+
+        // MESAJLARI VE KRALLARI ÇEK
+        onValue(query(ref(db, 'global_chat'), limitToLast(25)), (snap) => {
+            onValue(ref(db, 'krallar'), (kralSnap) => {
+                const krallar = kralSnap.val() || {};
+                const m = document.getElementById('messages'); m.innerHTML = "";
+                snap.forEach(c => {
+                    const d = c.val();
+                    const tac = krallar[d.user] ? " 👑" : ""; 
+                    m.innerHTML += `<div class="bg-white/5 p-3 rounded-2xl border border-white/5"><div class="text-indigo-400 font-black text-[9px] uppercase mb-1">${d.user}${tac}</div><div class="text-xs text-slate-200">${d.mesaj}</div></div>`;
+                });
+                m.scrollTop = m.scrollHeight;
+            });
+        });
+
+        // DİNAMİK SUNUCULARI ÇEK (FİLTRE İÇİN CLASS EKLEDİM)
+        onValue(ref(db, 'servers'), (snapshot) => {
+            const div = document.getElementById('dynamicServers');
+            div.innerHTML = ""; 
+            snapshot.forEach((child) => {
+                const s = child.val();
+                div.innerHTML += `
+                    <div class="glass card-glow p-8 rounded-[32px] server-card all ${s.kategoriler} relative overflow-hidden group border border-white/5">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-emerald-500/20 italic italic">YENİ</span>
+                            <div class="text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
                         </div>
-                        <div class="text-xs text-slate-200">${d.mesaj}</div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="${s.logo}" class="w-16 h-16 rounded-2xl border border-white/10 object-cover" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                            <h3 class="text-2xl font-extrabold text-white group-hover:text-indigo-400 transition">${s.ad}</h3>
+                        </div>
+                        <p class="text-slate-400 mb-8 text-sm h-12 overflow-hidden">${s.aciklama}</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase italic">#${s.kategoriler.replace(/ /g, " #")}</div>
+                            <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black hover:scale-105 transition-all uppercase text-xs">KATIL</a>
+                        </div>
                     </div>`;
             });
-            m.scrollTop = m.scrollHeight;
         });
-    });
 
-    window.sendMsg = () => {
-        const i = document.getElementById('chat-input');
-        if(i.value.trim()){ 
-            push(chatRef, { 
-                user: savedNick, 
-                mesaj: i.value, 
-                zaman: serverTimestamp() 
-            }); 
-            i.value = ""; 
-        }
-    };
-
-    // 4. OTOMATİK SUNUCU ÇEKME (FİLTRE UYUMLU)
-    onValue(ref(db, 'servers'), (snapshot) => {
-        const dynamicDiv = document.getElementById('dynamicServers');
-        dynamicDiv.innerHTML = ""; 
-        snapshot.forEach((child) => {
-            const s = child.val();
-            dynamicDiv.innerHTML += `
-                <div class="glass p-8 rounded-[32px] server-card all ${s.kategoriler} relative overflow-hidden group border border-white/5">
-                    <div class="flex justify-between items-start mb-6">
-                        <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-emerald-500/20 italic">AKTİF</span>
-                        <div class="text-yellow-500 text-xs">⭐⭐⭐⭐⭐</div>
-                    </div>
-                    <div class="flex items-center gap-4 mb-4">
-                        <img src="${s.logo}" class="w-16 h-16 rounded-2xl border border-white/10 object-cover shadow-lg" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                        <h3 class="text-2xl font-black text-white group-hover:text-indigo-400 transition">${s.ad}</h3>
-                    </div>
-                    <p class="text-slate-400 mb-8 text-sm h-12 overflow-hidden opacity-80">${s.aciklama}</p>
-                    <div class="flex items-center justify-between">
-                        <div class="text-[10px] font-bold text-slate-600 uppercase italic">
-                            #${s.kategoriler ? s.kategoriler.replace(/ /g, " #") : 'Genel'}
-                        </div>
-                        <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-3 rounded-xl font-black transition-all hover:scale-105 uppercase text-xs">KATIL</a>
-                    </div>
-                </div>`;
-        });
-    });
-
-    // Enter ile mesaj gönderme
-    document.getElementById('chat-input').addEventListener('keypress', (e) => { 
-        if(e.key === 'Enter') window.sendMsg(); 
-    });
-</script>
-
+        document.getElementById('chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') window.mesajGonder(); });
+    </script>
 
     <script>
-        // FILTRELEME VE DISCORD API
+        // FİLTRELEME SİSTEMİ (ONARILDI)
         function filterServers(category) {
             const cards = document.querySelectorAll('.server-card');
             const btns = document.querySelectorAll('.filter-btn');
+            
             btns.forEach(btn => {
                 btn.classList.remove('active-btn');
                 if (category === 'all' && btn.innerText === 'HEPSİ') btn.classList.add('active-btn');
                 if (btn.innerText.toLowerCase() === category) btn.classList.add('active-btn');
             });
+
             cards.forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    if (category === 'all' || card.classList.contains(category)) {
-                        card.style.display = 'block';
-                        setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
-                    } else { card.style.display = 'none'; }
-                }, 300);
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.style.display = 'block';
+                    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
-
-        async function discordCek(id, elementId) {
-            const el = document.getElementById(elementId);
-            try {
-                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://discord.com/api/guilds/${id}/widget.json`)}`);
-                const json = await res.json();
-                const data = JSON.parse(json.contents);
-                el.innerText = (data.presence_count || 0) + " AKTİF ÜYE";
-            } catch (e) { el.innerText = "BAĞLANTI YOK"; }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => { discordCek('1470113199226491162', 'advibe-status'); });
-        document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
 </body>
 </html>
