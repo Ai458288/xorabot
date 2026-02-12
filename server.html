@@ -37,38 +37,64 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-        const firebaseConfig = { /* SENİN FİREBASE BİLGİLERİN */ };
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    const firebaseConfig = {
+        apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
+        authDomain: "advibe-c61a6.firebaseapp.com",
+        databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
+        projectId: "advibe-c61a6",
+        appId: "1:699784874039:web:192ade518091e7279757b2"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-        // URL'den sunucu ID'sini al
-        const params = new URLSearchParams(window.location.search);
-        const serverId = params.get('id');
+    // 1. URL'den ID'yi al
+    const urlParams = new URLSearchParams(window.location.search);
+    const serverId = urlParams.get('id');
 
-        if(serverId) {
-            get(ref(db, `servers/${serverId}`)).then((snap) => {
-                if(snap.exists()) {
-                    const s = snap.val();
-                    document.getElementById('sAd').innerText = s.ad;
-                    document.getElementById('sLogo').src = s.logo;
-                    document.getElementById('sAciklama').innerText = s.aciklama;
-                    document.getElementById('sLink').href = s.link;
-                    
-                    // WIDGET'I EKLEME
-                    if(s.widget) {
-                        document.getElementById('sWidgetContainer').innerHTML = s.widget;
-                    } else {
-                        document.getElementById('sWidgetContainer').innerHTML = "<p class='text-xs text-slate-500 uppercase'>Bu sunucu için widget eklenmemiş.</p>";
-                    }
+    console.log("Aranan Sunucu ID:", serverId); // Konsoldan kontrol etmek için
 
-                    document.getElementById('loader').classList.add('hidden');
-                    document.getElementById('content').classList.remove('hidden');
+    if (!serverId) {
+        alert("ID Bulunamadı!");
+        window.location.href = 'advibe.html';
+    } else {
+        const serverRef = ref(db, 'servers/' + serverId);
+        
+        get(serverRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const s = snapshot.val();
+                
+                // Verileri doldur
+                document.getElementById('sAd').innerText = s.ad || "İsimsiz Sunucu";
+                document.getElementById('sLogo').src = s.logo || "https://via.placeholder.com/150";
+                document.getElementById('sKategori').innerText = "#" + (s.kategoriler || "genel");
+                document.getElementById('sAciklama').innerText = s.aciklama || "Açıklama belirtilmemiş.";
+                document.getElementById('sLink').href = s.link || "#";
+
+                // Widget kodunu güvenli şekilde bas
+                const widgetBox = document.getElementById('widgetContainer');
+                if (s.widget && s.widget.includes('iframe')) {
+                    widgetBox.innerHTML = s.widget;
+                } else {
+                    widgetBox.innerHTML = "<p class='text-[10px] p-6 text-center text-slate-500 font-bold'>WIDGET KODU GEÇERSİZ VEYA YOK</p>";
                 }
-            });
-        }
-    </script>
+
+                // Yükleniyor ekranını gizle
+                document.getElementById('loader').style.display = 'none';
+                console.log("Veri başarıyla yüklendi!");
+            } else {
+                console.error("Firebase'de böyle bir sunucu yok!");
+                document.getElementById('loader').innerText = "SUNUCU BULUNAMADI!";
+            }
+        }).catch((error) => {
+            console.error("Firebase Hatası:", error);
+            document.getElementById('loader').innerText = "VERİ ÇEKİLEMEDİ!";
+        });
+    }
+</script>
+
 </body>
 </html>
