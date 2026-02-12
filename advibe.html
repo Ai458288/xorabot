@@ -73,13 +73,24 @@
         const db = getDatabase(app);
 
         // --- 1. GERÇEK İZLEYİCİ SAYISI ---
-        const onlineRef = ref(db, 'online_users');
-        const myPresence = push(onlineRef);
-        onDisconnect(myPresence).remove();
-        set(myPresence, true);
-        onValue(onlineRef, (snap) => {
-            document.getElementById('onlineCount').innerText = (snap.numChildren() || 0) + " İZLEYİCİ";
-        });
+const onlineRef = ref(db, 'online_users');
+const myPresence = push(onlineRef);
+
+// Bağlantı koptuğunda sil
+onDisconnect(myPresence).remove();
+
+// Bağlantı sağlandığında ekle
+set(myPresence, true).catch(err => console.error("Bağlantı hatası:", err));
+
+onValue(onlineRef, (snap) => {
+    const count = snap.numChildren() || 0;
+    const el = document.getElementById('onlineCount');
+    if(el) el.innerText = count + " İZLEYİCİ";
+}, (error) => {
+    console.error("Veri okuma hatası:", error);
+    document.getElementById('onlineCount').innerText = "BAĞLANTI HATASI";
+});
+
 
         // --- 2. SOHBET SİSTEMİ ---
         const myName = localStorage.getItem('vibe_user') || "Anonim#" + Math.floor(1000 + Math.random() * 9000);
