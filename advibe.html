@@ -9,34 +9,57 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); min-height: 100vh; color: white; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 24px; border-radius: 16px; font-size: 11px; font-weight: 900; text-transform: uppercase; color: #94a3b8; transition: all 0.3s ease; }
-        .active-btn { background: #4f46e5 !important; color: white !important; }
+        .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 20px; border-radius: 14px; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; transition: all 0.3s ease; white-space: nowrap; }
+        .active-btn { background: #4f46e5 !important; color: white !important; border-color: #6366f1; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <nav class="max-w-6xl mx-auto flex justify-between items-center p-6 mb-10">
-        <h1 class="text-2xl font-black italic uppercase italic">Ad<span class="text-indigo-400">Vibe</span></h1>
-        <a href="ekle.html" class="glass px-8 py-3 rounded-full text-sm font-bold border border-indigo-500/30 text-indigo-300 uppercase">Sunucu Ekle</a>
+    <nav class="max-w-6xl mx-auto flex justify-between items-center p-4 md:p-6 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center gap-2">
+            <h1 class="text-2xl font-black italic uppercase tracking-tighter">Ad<span class="text-indigo-400">Vibe</span></h1>
+            <div class="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
+                <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span id="onlineCount" class="text-[9px] font-black text-emerald-400 uppercase">Yükleniyor...</span>
+            </div>
+        </div>
+        <a href="ekle.html" class="glass px-5 py-2.5 rounded-full text-[10px] md:text-xs font-black border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all uppercase italic">Sunucu Ekle</a>
     </nav>
 
-    <div class="max-w-6xl mx-auto px-6 mb-12 flex flex-wrap justify-center gap-3">
+    <div class="max-w-6xl mx-auto px-4 mb-10 overflow-x-auto flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-2 pb-4 no-scrollbar">
         <button onclick="filterServers('all')" class="filter-btn active-btn">HEPSİ</button>
         <button onclick="filterServers('destek')" class="filter-btn">DESTEK</button>
         <button onclick="filterServers('satis')" class="filter-btn">SATIŞ</button>
         <button onclick="filterServers('oyun')" class="filter-btn">OYUN</button>
         <button onclick="filterServers('yazilim')" class="filter-btn">YAZILIM</button>
-        <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY [RP]</button>
+        <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY</button>
     </div>
 
-    <main class="max-w-6xl mx-auto px-6 pb-20">
-        <div id="serverGrid" class="grid gap-8 md:grid-cols-2">
+    <main class="max-w-6xl mx-auto px-4 md:px-6 flex flex-col lg:flex-row gap-8 pb-20">
+        
+        <div id="serverGrid" class="flex-1 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 self-start">
             </div>
+
+        <div class="w-full lg:w-80 shrink-0">
+            <div class="glass rounded-[30px] p-5 border border-white/5 flex flex-col h-[500px] sticky top-6">
+                <h2 class="text-[10px] font-black uppercase italic text-indigo-400 mb-4 tracking-widest flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-ping"></span> Küresel Sohbet
+                </h2>
+                <div id="chatBox" class="flex-1 overflow-y-auto space-y-3 mb-4 pr-2">
+                    </div>
+                <div class="relative">
+                    <input type="text" id="chatInput" placeholder="Mesaj yaz..." class="w-full bg-[#020617]/50 border border-white/10 p-4 pr-12 rounded-2xl outline-none focus:border-indigo-500 text-[11px] transition-all" onkeypress="if(event.key==='Enter') sendMsg()">
+                    <button onclick="sendMsg()" class="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-500 font-black">OK</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update, runTransaction, get, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+        import { getDatabase, ref, onValue, update, runTransaction, get, set, push, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
@@ -49,35 +72,54 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // OY VERME FONKSİYONU
+        // --- 1. GERÇEK İZLEYİCİ SAYISI ---
+        const onlineRef = ref(db, 'online_users');
+        const myPresence = push(onlineRef);
+        onDisconnect(myPresence).remove();
+        set(myPresence, true);
+        onValue(onlineRef, (snap) => {
+            document.getElementById('onlineCount').innerText = (snap.numChildren() || 0) + " İZLEYİCİ";
+        });
+
+        // --- 2. SOHBET SİSTEMİ ---
+        const myName = localStorage.getItem('vibe_user') || "Anonim#" + Math.floor(1000 + Math.random() * 9000);
+        window.sendMsg = () => {
+            const inp = document.getElementById('chatInput');
+            if(!inp.value.trim()) return;
+            push(ref(db, 'global_chat'), { user: myName, mesaj: inp.value, zaman: serverTimestamp() });
+            inp.value = "";
+        };
+        onValue(ref(db, 'global_chat'), (snap) => {
+            const box = document.getElementById('chatBox'); box.innerHTML = "";
+            snap.forEach(c => {
+                const m = c.val();
+                box.innerHTML += `<div><span class="text-[9px] font-black text-indigo-400 uppercase italic">${m.user}</span><p class="text-[11px] text-slate-400 leading-tight">${m.mesaj}</p></div>`;
+            });
+            box.scrollTop = box.scrollHeight;
+        });
+
+        // --- 3. OY VERME ---
         window.oyVer = async (id, tip) => {
             const res = await fetch('https://api.ipify.org?format=json');
             const data = await res.json();
             const ip = data.ip.replace(/\./g, '_');
-            
             const voteRef = ref(db, `votes/${id}/${ip}`);
             const serverRef = ref(db, `servers/${id}`);
             const snapshot = await get(voteRef);
 
-            if (snapshot.exists() && snapshot.val() === tip) {
-                alert("Zaten oy vermişsin!"); return;
-            }
+            if (snapshot.exists() && snapshot.val() === tip) return;
 
             runTransaction(serverRef, (s) => {
                 if (s) {
                     if (!s.likes) s.likes = 0; if (!s.dislikes) s.dislikes = 0;
-                    if (tip === 'like') {
-                        s.likes++;
-                        if (snapshot.val() === 'dislike') s.dislikes--;
-                    } else {
-                        s.dislikes++;
-                        if (snapshot.val() === 'like') s.likes--;
-                    }
+                    if (tip === 'like') { s.likes++; if(snapshot.val()==='dislike') s.dislikes--; }
+                    else { s.dislikes++; if(snapshot.val()==='like') s.likes--; }
                 }
                 return s;
             }).then(() => set(voteRef, tip));
         };
 
+        // --- 4. SUNUCU LİSTELEME ---
         onValue(ref(db, 'servers'), (snap) => {
             const grid = document.getElementById('serverGrid'); grid.innerHTML = "";
             let servers = []; snap.forEach(c => { servers.push({id: c.key, ...c.val()}); });
@@ -85,26 +127,44 @@
 
             servers.forEach(s => {
                 grid.innerHTML += `
-                    <div class="glass p-8 rounded-[35px] border border-white/5 server-card all ${s.kategoriler}">
+                    <div class="glass p-6 md:p-8 rounded-[35px] border border-white/5 server-card all ${s.kategoriler} relative overflow-hidden group">
                         <div class="flex justify-between items-start mb-6">
-                            <span class="bg-indigo-600/20 text-indigo-300 text-[10px] font-black px-3 py-1 rounded-full uppercase italic">${s.tag || 'YENİ'}</span>
+                            <span class="bg-indigo-600/20 text-indigo-300 text-[9px] font-black px-3 py-1 rounded-full uppercase italic border border-indigo-500/20">${s.tag || 'YENİ'}</span>
                             <div class="flex gap-4">
-                                <button onclick="oyVer('${s.id}', 'like')" class="text-[10px] font-bold text-emerald-400 uppercase">👍 Beğeni: ${s.likes || 0}</button>
-                                <button onclick="oyVer('${s.id}', 'dislike')" class="text-[10px] font-bold text-red-400 uppercase">👎 Kötü: ${s.dislikes || 0}</button>
+                                <button onclick="oyVer('${s.id}', 'like')" class="text-[10px] font-bold text-emerald-400 hover:scale-110 transition">👍 ${s.likes || 0}</button>
+                                <button onclick="oyVer('${s.id}', 'dislike')" class="text-[10px] font-bold text-red-400 hover:scale-110 transition">👎 ${s.dislikes || 0}</button>
                             </div>
                         </div>
                         <div class="flex items-center gap-4 mb-4">
-                            <img src="${s.logo}" class="w-16 h-16 rounded-2xl border border-white/10">
-                            <h3 class="text-2xl font-black">${s.ad}</h3>
+                            <img src="${s.logo}" class="w-14 h-14 md:w-16 md:h-16 rounded-2xl border border-white/10 shadow-2xl object-cover">
+                            <div>
+                                <h3 class="text-xl md:text-2xl font-black italic uppercase italic tracking-tighter">${s.ad}</h3>
+                                <div class="flex items-center gap-1">
+                                    <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                                    <span class="text-[8px] font-black text-emerald-500 uppercase">Aktif</span>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-slate-400 mb-6 text-sm h-12 overflow-hidden">${s.aciklama}</p>
-                        <div class="flex justify-between items-center">
+                        <p class="text-slate-400 mb-6 text-[13px] h-10 overflow-hidden opacity-80">${s.aciklama}</p>
+                        <div class="flex justify-between items-center border-t border-white/5 pt-4">
                             <span class="text-[9px] font-bold text-slate-500 uppercase italic">#${s.kategoriler}</span>
-                            <a href="${s.link}" target="_blank" class="bg-white text-indigo-900 px-8 py-3 rounded-xl font-black text-xs uppercase">KATIL</a>
+                            <div class="flex gap-2">
+                                <a href="server.html?id=${s.id}" class="bg-white/5 border border-white/10 text-white px-4 py-2 rounded-xl font-black text-[10px] uppercase hover:bg-white hover:text-indigo-900 transition-all">İNCELE</a>
+                                <a href="${s.link}" target="_blank" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-black text-[10px] uppercase hover:shadow-lg hover:shadow-indigo-500/20 transition-all">KATIL</a>
+                            </div>
                         </div>
                     </div>`;
             });
         });
+
+        // --- 5. FİLTRELEME ---
+        window.filterServers = (cat) => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-btn'));
+            event.target.classList.add('active-btn');
+            document.querySelectorAll('.server-card').forEach(c => {
+                c.style.display = (cat === 'all' || c.classList.contains(cat)) ? 'block' : 'none';
+            });
+        };
     </script>
 </body>
 </html>
