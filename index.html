@@ -2,44 +2,116 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Giriş | AdVibe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* Sayfanın kaymasını tamamen engelle */
+        html, body { 
+            height: 100%; 
+            overflow: hidden; 
+            margin: 0; 
+            padding: 0;
+            position: fixed;
+            width: 100%;
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            touch-action: none; /* Kaydırmayı dokunmatik cihazlarda engeller */
+        }
+
+        .glass { 
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Giriş kutusuna hafif bir parlama efekti */
+        .login-card {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #4f46e5, transparent, #4f46e5);
+            border-radius: 42px;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        input::placeholder { color: rgba(148, 163, 184, 0.5); }
     </style>
 </head>
-<body class="p-6">
-    <div class="glass p-10 rounded-[40px] w-full max-w-md text-center shadow-2xl">
-        <div class="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(79,70,229,0.5)]">
-            <span class="text-white text-3xl font-black">AV</span>
+<body>
+
+    <div class="login-card glass p-8 md:p-12 rounded-[40px] w-[90%] max-w-[400px] text-center">
+        <div class="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(79,70,229,0.4)] rotate-3">
+            <span class="text-white text-3xl font-black italic uppercase">AV</span>
         </div>
-        <h1 class="text-3xl font-black text-white mb-2 italic uppercase">Hoş Geldin!</h1>
-        <p class="text-slate-400 text-sm mb-8 font-medium italic">Sohbet etmek için Discord adını yaz.</p>
+
+        <h1 class="text-3xl font-black text-white mb-2 italic uppercase tracking-tighter">
+            Ad<span class="text-indigo-500">Vibe</span>
+        </h1>
+        <p class="text-slate-400 text-[11px] mb-10 font-bold uppercase tracking-widest opacity-60">
+            Topluluğa Katılmaya Hazır Mısın?
+        </p>
         
-        <input type="text" id="username" placeholder="Discord Kullanıcı Adın..." 
-               class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:border-indigo-500 transition-all mb-4 text-center font-bold">
-        
-        <button onclick="girisYap()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl text-white font-black transition-all shadow-lg uppercase tracking-widest">
-            Giriş Yap
-        </button>
+        <div class="space-y-4">
+            <div class="relative">
+                <input type="text" id="username" maxlength="15" 
+                       placeholder="Discord Kullanıcı Adın..." 
+                       class="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-5 text-white outline-none focus:border-indigo-500 transition-all text-center font-bold text-sm"
+                       onkeypress="if(event.key==='Enter') girisYap()">
+            </div>
+            
+            <button onclick="girisYap()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl text-white font-black transition-all shadow-xl uppercase tracking-widest text-xs active:scale-95">
+                Sisteme Giriş Yap
+            </button>
+        </div>
+
+        <p class="mt-8 text-[9px] text-slate-500 font-bold uppercase tracking-widest">
+            Giriş yaparak kullanım şartlarını kabul edersin.
+        </p>
     </div>
 
     <script>
+        // Giriş Fonksiyonu
         function girisYap() {
-            const nick = document.getElementById('username').value.trim();
-            if(nick.length > 2) {
-                // Nickname'i tarayıcı hafızasına (localStorage) kaydediyoruz
+            const nickInput = document.getElementById('username');
+            const nick = nickInput.value.trim();
+            
+            if(nick.length >= 2) {
+                // İsmi kaydet
                 localStorage.setItem('advibe_nick', nick);
-                window.location.href = 'advibe.html';
+                
+                // Küçük bir efekt sonrası yönlendir
+                nickInput.disabled = true;
+                document.querySelector('button').innerText = "GİRİŞ YAPILIYOR...";
+                
+                setTimeout(() => {
+                    window.location.href = 'advibe.html';
+                }, 800);
             } else {
-                alert("Lütfen geçerli bir kullanıcı adı yaz kanka!");
+                alert("Kanka ismin çok kısa, en az 2 karakter yaz!");
             }
         }
-        // Eğer zaten giriş yaptıysa direkt yönlendir
-        if(localStorage.getItem('advibe_nick')) window.location.href = 'advibe.html';
+
+        // Zaten giriş yapıldıysa direkt yönlendir
+        window.onload = () => {
+            if(localStorage.getItem('advibe_nick')) {
+                window.location.href = 'advibe.html';
+            }
+        };
     </script>
 </body>
 </html>
