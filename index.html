@@ -7,111 +7,31 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Sayfanın kaymasını tamamen engelle */
-        html, body { 
-            height: 100%; 
-            overflow: hidden; 
-            margin: 0; 
-            padding: 0;
-            position: fixed;
-            width: 100%;
-        }
-        
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            touch-action: none; /* Kaydırmayı dokunmatik cihazlarda engeller */
-        }
-
-        .glass { 
-            background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Giriş kutusuna hafif bir parlama efekti */
-        .login-card {
-            position: relative;
-            z-index: 10;
-        }
-        
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, #4f46e5, transparent, #4f46e5);
-            border-radius: 42px;
-            z-index: -1;
-            opacity: 0.2;
-        }
-
-        input::placeholder { color: rgba(148, 163, 184, 0.5); }
+        html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; position: fixed; width: 100%; }
+        body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); display: flex; align-items: center; justify-content: center; touch-action: none; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
 </head>
 <body>
-
-    <div class="login-card glass p-8 md:p-12 rounded-[40px] w-[90%] max-w-[400px] text-center">
-        <div class="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(79,70,229,0.4)] rotate-3">
-            <span class="text-white text-3xl font-black italic uppercase">AV</span>
+    <div class="glass p-10 rounded-[40px] w-[90%] max-w-[400px] text-center shadow-2xl">
+        <div class="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(79,70,229,0.5)]">
+            <span class="text-white text-3xl font-black italic">AV</span>
         </div>
-
-        <h1 class="text-3xl font-black text-white mb-2 italic uppercase tracking-tighter">
-            Ad<span class="text-indigo-500">Vibe</span>
-        </h1>
-        <p class="text-slate-400 text-[11px] mb-10 font-bold uppercase tracking-widest opacity-60">
-            Topluluğa Katılmaya Hazır Mısın?
-        </p>
-        
-        <div class="space-y-4">
-            <div class="relative">
-                <input type="text" id="username" maxlength="15" 
-                       placeholder="Discord Kullanıcı Adın..." 
-                       class="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-5 text-white outline-none focus:border-indigo-500 transition-all text-center font-bold text-sm"
-                       onkeypress="if(event.key==='Enter') girisYap()">
-            </div>
-            
-            <button onclick="girisYap()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl text-white font-black transition-all shadow-xl uppercase tracking-widest text-xs active:scale-95">
-                Sisteme Giriş Yap
-            </button>
-        </div>
-
-        <p class="mt-8 text-[9px] text-slate-500 font-bold uppercase tracking-widest">
-            Giriş yaparak kullanım şartlarını kabul edersin.
-        </p>
+        <h1 class="text-3xl font-black text-white mb-2 italic uppercase tracking-tighter">Hoş Geldin!</h1>
+        <p class="text-slate-400 text-[11px] mb-8 font-bold uppercase tracking-widest opacity-60">Sohbet İçin Discord Adını Yaz</p>
+        <input type="text" id="username" placeholder="Kullanıcı Adın..." class="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-white outline-none focus:border-indigo-500 transition-all text-center font-bold mb-4">
+        <button onclick="girisYap()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl text-white font-black transition-all shadow-lg uppercase tracking-widest text-xs">Giriş Yap</button>
     </div>
 
     <script>
-        // Giriş Fonksiyonu
         function girisYap() {
-            const nickInput = document.getElementById('username');
-            const nick = nickInput.value.trim();
-            
+            const nick = document.getElementById('username').value.trim();
             if(nick.length >= 2) {
-                // İsmi kaydet
                 localStorage.setItem('advibe_nick', nick);
-                
-                // Küçük bir efekt sonrası yönlendir
-                nickInput.disabled = true;
-                document.querySelector('button').innerText = "GİRİŞ YAPILIYOR...";
-                
-                setTimeout(() => {
-                    window.location.href = 'advibe.html';
-                }, 800);
-            } else {
-                alert("Kanka ismin çok kısa, en az 2 karakter yaz!");
-            }
-        }
-
-        // Zaten giriş yapıldıysa direkt yönlendir
-        window.onload = () => {
-            if(localStorage.getItem('advibe_nick')) {
                 window.location.href = 'advibe.html';
-            }
-        };
+            } else { alert("İsim çok kısa kanka!"); }
+        }
+        window.onload = () => { if(localStorage.getItem('advibe_nick')) window.location.href = 'advibe.html'; };
     </script>
 </body>
 </html>
