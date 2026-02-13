@@ -60,14 +60,12 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getDatabase, ref, onValue, get, set, push, runTransaction, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-        // GİRİŞ KONTROLÜ
         const myName = localStorage.getItem('advibe_nick');
         if(!myName) window.location.href = 'index.html';
         document.getElementById('userDisplay').innerText = myName;
 
         window.cikisYap = () => { localStorage.removeItem('advibe_nick'); window.location.href = 'index.html'; };
 
-        // FIREBASE AYARLARI
         const firebaseConfig = {
             apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
             authDomain: "advibe-c61a6.firebaseapp.com",
@@ -78,30 +76,31 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- KESİN SONUÇ VEREN SAYAÇ SİSTEMİ ---
-        const countRef = ref(db, 'online_counter');
+        // --- ASLA ŞAŞMAYAN SAYAÇ SİSTEMİ (LİSTE TABANLI) ---
+        const onlineUsersRef = ref(db, 'online_users');
         const connectedRef = ref(db, '.info/connected');
 
         onValue(connectedRef, (snap) => {
             if (snap.val() === true) {
-                // Girişte +1 artır
-                runTransaction(countRef, (current) => (current || 0) + 1);
-                // Çıkışta -1 azalt
-                onDisconnect(countRef).runTransaction((current) => {
-                    if (current) return current - 1;
-                    return 0;
-                });
+                // Her sekme için BENZERSİZ bir yer ayır
+                const myPresence = push(onlineUsersRef);
+                
+                // Sisteme 'buradayım' de
+                set(myPresence, true);
+                
+                // Bağlantı koptuğu an BU BENZERSİZ kaydı sil
+                onDisconnect(myPresence).remove();
             }
         });
 
-        onValue(countRef, (snap) => {
-            const val = snap.val() || 1;
-            const countEl = document.getElementById('onlineCount');
-            if (countEl) countEl.innerText = val + " İZLEYİCİ";
+        // Tüm listeyi dinle ve kaç tane 'true' varsa onu yaz
+        onValue(onlineUsersRef, (snap) => {
+            const count = snap.numChildren() || 1;
+            const el = document.getElementById('onlineCount');
+            if(el) el.innerText = count + " İZLEYİCİ";
         });
-        // -------------------------------------
+        // -------------------------------------------------
 
-        // SOHBET SİSTEMİ
         window.sendMsg = () => {
             const inp = document.getElementById('chatInput');
             if(!inp.value.trim()) return;
@@ -118,7 +117,6 @@
             box.scrollTop = box.scrollHeight;
         });
 
-        // OY VERME SİSTEMİ
         window.oyVer = async (id, tip) => {
             const res = await fetch('https://api.ipify.org?format=json');
             const data = await res.json();
@@ -135,7 +133,6 @@
             }).then(() => set(voteRef, tip));
         };
 
-        // SUNUCU LİSTELEME
         onValue(ref(db, 'servers'), (snap) => {
             const grid = document.getElementById('serverGrid'); grid.innerHTML = "";
             let servers = []; snap.forEach(c => { servers.push({id: c.key, ...c.val()}); });
@@ -169,7 +166,6 @@
             });
         });
 
-        // FİLTRELEME FONKSİYONU
         window.filterServers = (cat) => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-btn'));
             event.target.classList.add('active-btn');
