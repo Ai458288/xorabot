@@ -21,7 +21,7 @@
             <h1 class="text-2xl font-black italic uppercase">Ad<span class="text-indigo-500">Vibe</span></h1>
             <div class="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
                 <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span id="onlineCount" class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">1 İZLEYİCİ</span>
+                <span id="onlineCount" class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">...</span>
             </div>
         </div>
         <div class="flex items-center gap-3">
@@ -76,30 +76,23 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- ASLA ŞAŞMAYAN SAYAÇ SİSTEMİ (LİSTE TABANLI) ---
+        // --- TAMAMEN DİNAMİK SAYAÇ ---
         const onlineUsersRef = ref(db, 'online_users');
-        const connectedRef = ref(db, '.info/connected');
+        
+        // Her giriş yapan için benzersiz bir "varlık" oluştur
+        const myPresence = push(onlineUsersRef);
+        set(myPresence, { name: myName, time: serverTimestamp() });
 
-        onValue(connectedRef, (snap) => {
-            if (snap.val() === true) {
-                // Her sekme için BENZERSİZ bir yer ayır
-                const myPresence = push(onlineUsersRef);
-                
-                // Sisteme 'buradayım' de
-                set(myPresence, true);
-                
-                // Bağlantı koptuğu an BU BENZERSİZ kaydı sil
-                onDisconnect(myPresence).remove();
-            }
-        });
+        // Bağlantı koptuğu an bu benzersiz kaydı sil
+        onDisconnect(myPresence).remove();
 
-        // Tüm listeyi dinle ve kaç tane 'true' varsa onu yaz
+        // Listeyi anlık dinle ve o değişkeni (count) ekrana bas
         onValue(onlineUsersRef, (snap) => {
-            const count = snap.numChildren() || 1;
-            const el = document.getElementById('onlineCount');
-            if(el) el.innerText = count + " İZLEYİCİ";
+            const count = snap.numChildren(); 
+            // Eğer sayı 0 ise (henüz veri gelmediyse) boş görünmesin diye 1 yazdır
+            document.getElementById('onlineCount').innerText = (count > 0 ? count : 1) + " İZLEYİCİ";
         });
-        // -------------------------------------------------
+        // -----------------------------
 
         window.sendMsg = () => {
             const inp = document.getElementById('chatInput');
