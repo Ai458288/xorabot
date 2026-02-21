@@ -7,61 +7,60 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; }
+        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .dc-btn { background: #5865F2; transition: 0.3s; }
-        .tag-checkbox:checked + label { background: #4f46e5 !important; border-color: #6366f1 !important; }
+        .dc-btn { background: #5865F2; transition: 0.3s; cursor: pointer; }
+        .tag-checkbox:checked + label { background: #4f46e5 !important; border-color: #6366f1 !important; color: white; }
         .hidden { display: none; }
-        /* Modal için basit stil */
-        #tagModal { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        #tagModal { background: rgba(0,0,0,0.85); backdrop-blur: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-10">
 
-    <nav class="max-w-6xl mx-auto flex justify-between items-center mb-10">
-        <h1 class="text-2xl font-black italic uppercase">Ad<span class="text-indigo-500">Vibe</span> Panel</h1>
-        <div id="userInfo" class="flex items-center gap-4">
-            </div>
+    <nav class="max-w-6xl mx-auto flex justify-between items-center mb-12">
+        <a href="advibe.html" class="text-xl font-black italic uppercase">Ad<span class="text-indigo-500">Vibe</span></a>
+        <div id="userInfo" class="flex items-center gap-4"></div>
     </nav>
 
     <main class="max-w-6xl mx-auto">
         <div id="loginStep" class="hidden text-center py-20">
-            <h2 class="text-4xl font-black mb-6 uppercase">Yönetim Paneline Hoş Geldin</h2>
-            <button onclick="discordLogin()" class="dc-btn px-8 py-4 rounded-2xl font-black uppercase flex items-center gap-3 mx-auto transition hover:scale-105">
+            <h2 class="text-4xl font-black mb-6 uppercase italic">Yönetim <span class="text-indigo-500">Paneli</span></h2>
+            <p class="text-slate-500 mb-8 font-bold text-sm tracking-widest uppercase">Sunucularını yönetmek için Discord ile bağlan.</p>
+            <button onclick="discordLogin()" class="dc-btn px-10 py-5 rounded-3xl font-black uppercase flex items-center gap-4 mx-auto hover:scale-105 transition">
                 <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" class="w-6 invert">
                 Discord İle Giriş Yap
             </button>
         </div>
 
         <div id="dashboardStep" class="hidden">
-            <h2 class="text-xl font-black mb-8 uppercase text-slate-400">Yönettiğin Sunucular</h2>
-            <div id="guildList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <h2 class="text-xs font-black mb-10 uppercase text-slate-500 tracking-[0.3em]">Yönettiğin Sunucular</h2>
+            <div id="guildList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 </div>
         </div>
     </main>
 
     <div id="tagModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
-        <div class="glass p-8 rounded-[40px] max-w-md w-full border border-white/10">
+        <div class="glass p-8 rounded-[40px] max-w-sm w-full border border-white/10">
             <h3 class="text-xl font-black uppercase mb-2" id="modalTitle">Kategori Seç</h3>
-            <p class="text-slate-500 text-[10px] mb-6 uppercase font-bold">En fazla 2 adet seçim yapabilirsin.</p>
+            <p class="text-slate-500 text-[10px] mb-8 uppercase font-bold">Maksimum 2 adet tag seçebilirsin.</p>
             
-            <div class="flex flex-wrap gap-2 mb-8">
+            <div class="flex flex-wrap gap-2 mb-10">
                 <input type="checkbox" name="tags" value="oyun" id="t-oyun" class="hidden tag-checkbox">
-                <label for="t-oyun" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Oyun</label>
+                <label for="t-oyun" class="px-5 py-2.5 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Oyun</label>
                 
                 <input type="checkbox" name="tags" value="satis" id="t-satis" class="hidden tag-checkbox">
-                <label for="t-satis" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Satış</label>
+                <label for="t-satis" class="px-5 py-2.5 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Satış</label>
                 
                 <input type="checkbox" name="tags" value="destek" id="t-destek" class="hidden tag-checkbox">
-                <label for="t-destek" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Destek</label>
+                <label for="t-destek" class="px-5 py-2.5 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Destek</label>
                 
                 <input type="checkbox" name="tags" value="rp" id="t-rp" class="hidden tag-checkbox">
-                <label for="t-rp" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Roleplay</label>
+                <label for="t-rp" class="px-5 py-2.5 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition">Roleplay</label>
             </div>
 
-            <div class="flex gap-3">
-                <button onclick="closeModal()" class="flex-1 bg-white/5 p-4 rounded-2xl font-black uppercase text-[10px]">İptal</button>
-                <button onclick="finalSubmit()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-[10px]">Onayla ve Ekle</button>
+            <div class="flex gap-4">
+                <button onclick="closeModal()" class="flex-1 bg-white/5 p-4 rounded-2xl font-black uppercase text-[10px] hover:bg-white/10 transition">Vazgeç</button>
+                <button onclick="finalSubmit()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-black uppercase text-[10px] hover:bg-indigo-500 transition">Ekle</button>
             </div>
         </div>
     </div>
@@ -70,8 +69,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
+        // AYARLAR
         const CLIENT_ID = "1474791108054618319"; 
-        const REDIRECT_URI = "https://advibetr.vercel.app/ekle.html"; // Burayı panelindeki ile aynı tut
+        const REDIRECT_URI = window.location.origin + "/ekle.html"; // Kesin link
 
         const firebaseConfig = {
             apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
@@ -84,91 +84,83 @@
         const db = getDatabase(app);
 
         let currentToken = localStorage.getItem('dc_access_token');
-        let registeredServers = {}; // Firebase'deki sunucular
-        let selectedGuild = null;
+        let dbServers = {};
+        let activeGuild = null;
 
-        // Sayfa Açıldığında Kontrol
+        // Sayfa Kontrol
         window.onload = () => {
             const fragment = new URLSearchParams(window.location.hash.slice(1));
-            const tokenFromUrl = fragment.get('access_token');
+            const token = fragment.get('access_token');
             
-            if (tokenFromUrl) {
-                localStorage.setItem('dc_access_token', tokenFromUrl);
-                window.location.hash = ""; // URL'yi temizle
-                currentToken = tokenFromUrl;
+            if (token) {
+                localStorage.setItem('dc_access_token', token);
+                window.location.hash = "";
+                currentToken = token;
             }
 
             if (!currentToken) {
                 document.getElementById('loginStep').classList.remove('hidden');
             } else {
-                fetchUserData();
-                syncFirebase();
+                fetchUser();
+                syncDB();
             }
         };
 
-        // Firebase ile Senkronizasyon
-        function syncFirebase() {
+        function syncDB() {
             onValue(ref(db, 'servers'), (snap) => {
-                registeredServers = {};
-                snap.forEach(child => {
-                    const data = child.val();
-                    registeredServers[data.guildId] = child.key; // ID'leri eşle
-                });
-                fetchGuilds(); // Firebase verisi gelince listeyi tazele
+                dbServers = snap.val() || {};
+                fetchGuilds();
             });
         }
 
-        // Discord Giriş
         window.discordLogin = () => {
             const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify%20guilds`;
             window.location.href = url;
         };
 
-        // Kullanıcı Bilgisi ve Çıkış Butonu
-        async function fetchUserData() {
-            const res = await fetch('https://discord.com/api/users/@me', {
-                headers: { Authorization: `Bearer ${currentToken}` }
-            });
-            const user = await res.json();
-            document.getElementById('userInfo').innerHTML = `
-                <div class="flex items-center gap-2">
-                    <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="w-8 h-8 rounded-full border border-indigo-500">
-                    <span class="text-[10px] font-black uppercase italic">${user.username}</span>
-                </div>
-                <button onclick="logout()" class="text-red-500 text-[10px] font-black uppercase italic">Çıkış</button>
-            `;
+        async function fetchUser() {
+            try {
+                const res = await fetch('https://discord.com/api/users/@me', {
+                    headers: { Authorization: `Bearer ${currentToken}` }
+                });
+                const user = await res.json();
+                document.getElementById('userInfo').innerHTML = `
+                    <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="w-6 h-6 rounded-full border border-indigo-500">
+                        <span class="text-[9px] font-black uppercase italic">${user.username}</span>
+                        <button onclick="logout()" class="text-red-500 text-[9px] font-black uppercase ml-2 hover:text-white transition">Çıkış</button>
+                    </div>
+                `;
+            } catch(e) { logout(); }
         }
 
         window.logout = () => {
             localStorage.removeItem('dc_access_token');
-            window.location.reload();
+            window.location.href = 'ekle.html';
         };
 
-        // Sunucuları Listeleme
         async function fetchGuilds() {
             const res = await fetch('https://discord.com/api/users/@me/guilds', {
                 headers: { Authorization: `Bearer ${currentToken}` }
             });
             const guilds = await res.json();
-            if(!guilds.length) return;
-
             const list = document.getElementById('guildList');
             list.innerHTML = "";
-            const adminGuilds = guilds.filter(g => (g.permissions & 0x8) === 0x8);
-
-            adminGuilds.forEach(g => {
-                const isAdded = registeredServers[g.id];
+            
+            // Sadece Administrator (0x8) yetkisi olanlar
+            guilds.filter(g => (g.permissions & 0x8) === 0x8).forEach(g => {
+                const isAdded = dbServers[g.id];
                 const logo = g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : 'https://cdn-icons-png.flaticon.com/512/2111/2111370.png';
                 
                 list.innerHTML += `
-                    <div class="glass p-6 rounded-[30px] flex flex-col items-center text-center border border-white/5">
-                        <img src="${logo}" class="w-16 h-16 rounded-2xl mb-4 border border-white/10">
-                        <h3 class="font-black uppercase italic text-sm mb-1">${g.name}</h3>
-                        <p class="text-[10px] text-slate-500 mb-6 line-clamp-2">Discord Yönetici Yetkili Sunucu</p>
+                    <div class="glass p-8 rounded-[40px] flex flex-col items-center text-center border border-white/5 hover:border-indigo-500/30 transition duration-500">
+                        <img src="${logo}" class="w-20 h-20 rounded-[30px] mb-6 border border-white/10 shadow-2xl">
+                        <h3 class="font-black uppercase italic text-sm mb-2">${g.name}</h3>
+                        <p class="text-[9px] text-slate-500 mb-8 font-bold uppercase tracking-widest">Yönetici Yetkisi Aktif</p>
                         
                         ${isAdded 
-                            ? `<button onclick="removeServer('${isAdded}')" class="w-full py-3 rounded-xl bg-red-500/10 text-red-500 text-[10px] font-black uppercase border border-red-500/20">Listeden Kaldır</button>`
-                            : `<button onclick="openAddModal('${g.id}', '${g.name}', '${logo}')" class="w-full py-3 rounded-xl bg-indigo-600 text-white text-[10px] font-black uppercase">Listeye Ekle</button>`
+                            ? `<button onclick="removeS('${g.id}')" class="w-full py-4 rounded-2xl bg-red-500/10 text-red-500 text-[10px] font-black uppercase border border-red-500/20 hover:bg-red-500 hover:text-white transition">Listeden Kaldır</button>`
+                            : `<button onclick="openM('${g.id}','${g.name}','${logo}')" class="w-full py-4 rounded-2xl bg-indigo-600 text-white text-[10px] font-black uppercase shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition">Listeye Ekle</button>`
                         }
                     </div>
                 `;
@@ -176,55 +168,52 @@
             document.getElementById('dashboardStep').classList.remove('hidden');
         }
 
-        // --- EKLEME VE KALDIRMA MANTIĞI ---
-
-        window.openAddModal = (id, name, logo) => {
-            selectedGuild = { id, name, logo };
-            document.getElementById('modalTitle').innerText = name;
+        window.openM = (id, n, l) => {
+            activeGuild = { id, n, l };
+            document.getElementById('modalTitle').innerText = n;
             document.getElementById('tagModal').classList.remove('hidden');
         };
 
         window.closeModal = () => {
             document.getElementById('tagModal').classList.add('hidden');
-            selectedGuild = null;
+            activeGuild = null;
         };
 
-        // Tag Sınırı
-        const checkboxes = document.querySelectorAll('input[name="tags"]');
-        checkboxes.forEach(cb => {
+        // Tag Limit
+        document.querySelectorAll('input[name="tags"]').forEach(cb => {
             cb.addEventListener('change', () => {
-                const checked = document.querySelectorAll('input[name="tags"]:checked').length;
-                if(checked > 2) { cb.checked = false; alert("Maksimum 2 tag seçebilirsin!"); }
+                if(document.querySelectorAll('input[name="tags"]:checked').length > 2) {
+                    cb.checked = false;
+                    alert("En fazla 2 tag seçebilirsin kanka!");
+                }
             });
         });
 
         window.finalSubmit = () => {
-            const tags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(cb => cb.value);
-            if(tags.length === 0) return alert("En az 1 kategori seç kanka!");
+            const tags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(c => c.value);
+            if(!tags.length) return alert("En az 1 kategori seçmelisin!");
 
-            const serverRef = ref(db, `servers/${selectedGuild.id}`); // Sunucu ID'sini key yapıyoruz (Tekil olması için)
-            set(serverRef, {
-                ad: selectedGuild.name,
-                guildId: selectedGuild.id,
-                logo: selectedGuild.logo,
+            set(ref(db, `servers/${activeGuild.id}`), {
+                ad: activeGuild.n,
+                logo: activeGuild.l,
+                guildId: activeGuild.id,
                 kategoriler: tags.join(' '),
-                aciklama: `${selectedGuild.name} sunucusu seni bekliyor!`,
+                aciklama: `${activeGuild.n} sunucusu artık AdVibe'da! Hemen katıl ve topluluğa dahil ol.`,
                 likes: 0,
                 dislikes: 0,
-                link: `https://discord.gg/davet`,
+                link: `https://discord.gg/davet`, 
                 sira: 99
             }).then(() => {
                 closeModal();
-                alert("Sunucu başarıyla eklendi!");
+                alert("Sunucu başarıyla eklendi kanka!");
             });
         };
 
-        window.removeServer = (id) => {
-            if(confirm("Sunucuyu listeden kaldırmak istediğine emin misin?")) {
-                remove(ref(db, `servers/${id}`)).then(() => alert("Sunucu kaldırıldı."));
+        window.removeS = (id) => {
+            if(confirm("Bu sunucuyu listeden silmek istediğine emin misin?")) {
+                remove(ref(db, `servers/${id}`));
             }
         };
-
     </script>
 </body>
 </html>
