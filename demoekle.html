@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord ile Ekle | AdVibe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .dc-btn { background: #5865F2; transition: 0.3s; cursor: pointer; }
+        .dc-btn:hover { background: #4752c4; transform: translateY(-2px); }
+        .tag-checkbox:checked + label { background: #4f46e5 !important; border-color: #6366f1 !important; color: white; }
+        input, textarea { background: rgba(0,0,0,0.4) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-2xl mx-auto">
+        <a href="advibe.html" class="text-[10px] font-black uppercase text-slate-500 hover:text-indigo-400 transition">← Vazgeç</a>
+        
+        <div class="glass p-8 rounded-[40px] mt-6">
+            <h1 class="text-3xl font-black italic uppercase mb-2">Sunucunu <span class="text-indigo-500">Bağla</span></h1>
+            <p class="text-slate-500 text-xs mb-8 uppercase font-bold tracking-widest">Sadece yönetici olduğun sunucular listelenir.</p>
+
+            <div id="authStep">
+                <button onclick="discordLogin()" class="dc-btn w-full p-5 rounded-2xl font-black uppercase italic flex items-center justify-center gap-3">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" class="w-6 invert">
+                    Discord ile Giriş Yap
+                </button>
+            </div>
+
+            <div id="formStep" class="hidden space-y-6">
+                <div>
+                    <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Sunucuların</label>
+                    <select id="guildSelect" onchange="fillServerData()" class="w-full p-4 rounded-2xl bg-black/40 border border-white/10 outline-none mt-1">
+                        <option value="">Lütfen seç...</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Sunucu Adı (Otomatik)</label>
+                        <input type="text" id="ad" readonly class="w-full p-4 rounded-2xl opacity-60 mt-1 cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Kategoriler (En Fazla 2)</label>
+                        <div class="flex flex-wrap gap-2 mt-1" id="tagContainer">
+                            <div class="relative">
+                                <input type="checkbox" name="tags" value="oyun" id="tag-oyun" class="hidden tag-checkbox">
+                                <label for="tag-oyun" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Oyun</label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" name="tags" value="satis" id="tag-satis" class="hidden tag-checkbox">
+                                <label for="tag-satis" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Satış</label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" name="tags" value="destek" id="tag-destek" class="hidden tag-checkbox">
+                                <label for="tag-destek" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Destek</label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" name="tags" value="rp" id="tag-rp" class="hidden tag-checkbox">
+                                <label for="tag-rp" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Roleplay</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Sunucu Açıklaması</label>
+                    <textarea id="aciklama" placeholder="Sunucunu anlatan en kral cümleyi yaz..." class="w-full p-4 rounded-2xl outline-none mt-1 h-32"></textarea>
+                </div>
+
+                <input type="hidden" id="logo">
+                <input type="hidden" id="guildId">
+
+                <button onclick="sunucuKaydet()" class="w-full bg-indigo-600 hover:bg-indigo-500 p-5 rounded-2xl font-black uppercase italic transition shadow-lg shadow-indigo-600/20">Listeye Ekle ve Yayınla</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+        const CLIENT_ID = "1474791108054618319"; 
+        const REDIRECT_URI = "https://advibetr.vercel.app/ekle.html";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
+            authDomain: "advibe-c61a6.firebaseapp.com",
+            databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
+            projectId: "advibe-c61a6",
+            appId: "1:699784874039:web:192ade518091e7279757b2"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Discord Login
+        window.discordLogin = () => {
+            const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify%20guilds`;
+            window.location.href = url;
+        };
+
+        // 2 Tag Sınırı Kontrolü
+        const checkboxes = document.querySelectorAll('input[name="tags"]');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const checkedCount = document.querySelectorAll('input[name="tags"]:checked').length;
+                if(checkedCount > 2) {
+                    cb.checked = false;
+                    alert("En fazla 2 kategori seçebilirsin kanka!");
+                }
+            });
+        });
+
+        // Token ve Sunucu Çekme
+        const fragment = new URLSearchParams(window.location.hash.slice(1));
+        const accessToken = fragment.get('access_token');
+
+        if (accessToken) {
+            document.getElementById('authStep').classList.add('hidden');
+            document.getElementById('formStep').classList.remove('hidden');
+            
+            fetch('https://discord.com/api/users/@me/guilds', {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            })
+            .then(res => res.json())
+            .then(guilds => {
+                const select = document.getElementById('guildSelect');
+                const adminGuilds = guilds.filter(g => (g.permissions & 0x8) === 0x8);
+                adminGuilds.forEach(g => {
+                    let opt = document.createElement('option');
+                    opt.value = JSON.stringify(g);
+                    opt.innerHTML = g.name;
+                    select.appendChild(opt);
+                });
+            });
+        }
+
+        window.fillServerData = () => {
+            const select = document.getElementById('guildSelect');
+            if(!select.value) return;
+            const guild = JSON.parse(select.value);
+            document.getElementById('ad').value = guild.name;
+            document.getElementById('guildId').value = guild.id;
+            document.getElementById('logo').value = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : 'https://cdn0.iconfinder.com/data/icons/free-social-media-set/24/discord-512.png';
+        };
+
+        window.sunucuKaydet = () => {
+            const ad = document.getElementById('ad').value;
+            const aciklama = document.getElementById('aciklama').value;
+            const logo = document.getElementById('logo').value;
+            const gid = document.getElementById('guildId').value;
+            
+            // Seçilen tagleri al
+            const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(cb => cb.value);
+
+            if(!gid || !aciklama || selectedTags.length === 0) {
+                return alert("Tüm alanları doldur ve en az 1 kategori seç!");
+            }
+
+            const newRef = push(ref(db, 'servers'));
+            set(newRef, {
+                ad: ad,
+                kategoriler: selectedTags.join(' '), // Veritabanına "oyun rp" şeklinde kaydeder
+                aciklama: aciklama,
+                logo: logo,
+                link: `https://discord.gg/davetlinki`, // Burası manuel veya bot ile alınabilir
+                likes: 0,
+                dislikes: 0,
+                sira: 99
+            }).then(() => {
+                alert("Başarıyla eklendi! Listeye uçuyoruz...");
+                window.location.href = 'advibe.html';
+            });
+        };
+    </script>
+</body>
+</html>
