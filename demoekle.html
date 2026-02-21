@@ -35,35 +35,30 @@
             <div id="formStep" class="hidden space-y-6">
                 <div>
                     <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Sunucuların</label>
-                    <select id="guildSelect" onchange="fillServerData()" class="w-full p-4 rounded-2xl bg-black/40 border border-white/10 outline-none mt-1">
+                    <select id="guildSelect" onchange="fillServerData()" class="w-full p-4 rounded-2xl bg-black/40 border border-white/10 outline-none mt-1 text-white">
                         <option value="">Lütfen seç...</option>
                     </select>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Sunucu Adı (Otomatik)</label>
+                        <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Sunucu Adı</label>
                         <input type="text" id="ad" readonly class="w-full p-4 rounded-2xl opacity-60 mt-1 cursor-not-allowed">
                     </div>
                     <div>
-                        <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Kategoriler (En Fazla 2)</label>
-                        <div class="flex flex-wrap gap-2 mt-1" id="tagContainer">
-                            <div class="relative">
-                                <input type="checkbox" name="tags" value="oyun" id="tag-oyun" class="hidden tag-checkbox">
-                                <label for="tag-oyun" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Oyun</label>
-                            </div>
-                            <div class="relative">
-                                <input type="checkbox" name="tags" value="satis" id="tag-satis" class="hidden tag-checkbox">
-                                <label for="tag-satis" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Satış</label>
-                            </div>
-                            <div class="relative">
-                                <input type="checkbox" name="tags" value="destek" id="tag-destek" class="hidden tag-checkbox">
-                                <label for="tag-destek" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Destek</label>
-                            </div>
-                            <div class="relative">
-                                <input type="checkbox" name="tags" value="rp" id="tag-rp" class="hidden tag-checkbox">
-                                <label for="tag-rp" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Roleplay</label>
-                            </div>
+                        <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Kategoriler (Maks 2)</label>
+                        <div class="flex flex-wrap gap-2 mt-1">
+                            <input type="checkbox" name="tags" value="oyun" id="tag-oyun" class="hidden tag-checkbox">
+                            <label for="tag-oyun" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Oyun</label>
+                            
+                            <input type="checkbox" name="tags" value="satis" id="tag-satis" class="hidden tag-checkbox">
+                            <label for="tag-satis" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Satış</label>
+                            
+                            <input type="checkbox" name="tags" value="destek" id="tag-destek" class="hidden tag-checkbox">
+                            <label for="tag-destek" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Destek</label>
+                            
+                            <input type="checkbox" name="tags" value="rp" id="tag-rp" class="hidden tag-checkbox">
+                            <label for="tag-rp" class="px-4 py-2 rounded-xl border border-white/5 bg-white/5 text-[9px] font-black uppercase cursor-pointer block transition">Roleplay</label>
                         </div>
                     </div>
                 </div>
@@ -85,8 +80,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
+        // Görüntüden alınan kesin bilgiler:
         const CLIENT_ID = "1474791108054618319"; 
-        const REDIRECT_URI = "https://advibetr.vercel.app/ekle.html";
+        const REDIRECT_URI = "https://advibetr.vercel.app/"; // Panelindeki ile birebir aynı yaptım!
 
         const firebaseConfig = {
             apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
@@ -98,25 +94,20 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Discord Login
         window.discordLogin = () => {
             const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify%20guilds`;
             window.location.href = url;
         };
 
-        // 2 Tag Sınırı Kontrolü
+        // 2 Tag Sınırı
         const checkboxes = document.querySelectorAll('input[name="tags"]');
         checkboxes.forEach(cb => {
             cb.addEventListener('change', () => {
                 const checkedCount = document.querySelectorAll('input[name="tags"]:checked').length;
-                if(checkedCount > 2) {
-                    cb.checked = false;
-                    alert("En fazla 2 kategori seçebilirsin kanka!");
-                }
+                if(checkedCount > 2) { cb.checked = false; alert("Maksimum 2 kategori seçebilirsin!"); }
             });
         });
 
-        // Token ve Sunucu Çekme
         const fragment = new URLSearchParams(window.location.hash.slice(1));
         const accessToken = fragment.get('access_token');
 
@@ -146,34 +137,30 @@
             const guild = JSON.parse(select.value);
             document.getElementById('ad').value = guild.name;
             document.getElementById('guildId').value = guild.id;
-            document.getElementById('logo').value = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : 'https://cdn0.iconfinder.com/data/icons/free-social-media-set/24/discord-512.png';
+            document.getElementById('logo').value = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : 'https://cdn-icons-png.flaticon.com/512/2111/2111370.png';
         };
 
         window.sunucuKaydet = () => {
+            const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(cb => cb.value);
             const ad = document.getElementById('ad').value;
             const aciklama = document.getElementById('aciklama').value;
             const logo = document.getElementById('logo').value;
             const gid = document.getElementById('guildId').value;
-            
-            // Seçilen tagleri al
-            const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(cb => cb.value);
 
-            if(!gid || !aciklama || selectedTags.length === 0) {
-                return alert("Tüm alanları doldur ve en az 1 kategori seç!");
-            }
+            if(!gid || !aciklama || selectedTags.length === 0) return alert("Eksik bilgi bırakma!");
 
             const newRef = push(ref(db, 'servers'));
             set(newRef, {
                 ad: ad,
-                kategoriler: selectedTags.join(' '), // Veritabanına "oyun rp" şeklinde kaydeder
+                kategoriler: selectedTags.join(' '),
                 aciklama: aciklama,
                 logo: logo,
-                link: `https://discord.gg/davetlinki`, // Burası manuel veya bot ile alınabilir
+                link: `https://discord.gg/davet`, 
                 likes: 0,
                 dislikes: 0,
                 sira: 99
             }).then(() => {
-                alert("Başarıyla eklendi! Listeye uçuyoruz...");
+                alert("Sunucu eklendi!");
                 window.location.href = 'advibe.html';
             });
         };
