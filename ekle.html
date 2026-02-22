@@ -14,6 +14,9 @@
         .hidden { display: none; }
         #tagModal { background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); }
         .blocked-btn { background: rgba(239, 68, 68, 0.05); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.1); cursor: not-allowed; }
+        /* Kaydırma çubuğu gizleme */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 </head>
 <body class="p-4 md:p-10">
@@ -36,8 +39,7 @@
 
         <div id="dashboardStep" class="hidden">
             <h2 class="text-xs font-black mb-10 uppercase text-slate-500 tracking-[0.3em]">Sunucuların</h2>
-            <div id="guildList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                </div>
+            <div id="guildList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             <div id="noGuildsMessage" class="hidden text-center py-20">
                 <h3 class="text-2xl font-black uppercase text-slate-700 italic">Bir Sunucuda Bulunmuyorsun!</h3>
                 <p class="text-xs text-slate-500 mt-2 font-bold uppercase">Sadece yönetici olduğun sunucular listelenir.</p>
@@ -47,9 +49,15 @@
 
     <div id="tagModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
         <div class="glass p-10 rounded-[50px] max-w-sm w-full border border-white/10 shadow-2xl">
-            <h3 class="text-xl font-black uppercase mb-2" id="modalTitle">Kategori Seç</h3>
-            <p class="text-slate-500 text-[10px] mb-8 uppercase font-bold tracking-tighter">Sunucun için en fazla 2 kategori belirle.</p>
+            <h3 class="text-xl font-black uppercase mb-2" id="modalTitle">Sunucuyu Düzenle</h3>
+            <p class="text-slate-500 text-[10px] mb-6 uppercase font-bold tracking-tighter">Kategori ve kalıcı link ayarla.</p>
             
+            <div class="mb-6">
+                <label class="text-[9px] font-black uppercase text-indigo-400 block mb-2 tracking-widest">Kalıcı Davet Linki</label>
+                <input type="text" id="inviteLinkInput" placeholder="https://discord.gg/..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-xs font-bold outline-none focus:border-indigo-500 transition">
+            </div>
+
+            <label class="text-[9px] font-black uppercase text-indigo-400 block mb-2 tracking-widest">Kategoriler (Max 2)</label>
             <div class="flex flex-wrap gap-2 mb-10" id="tagContainer">
                 <input type="checkbox" name="tags" value="oyun" id="t-oyun" class="hidden tag-checkbox">
                 <label for="t-oyun" class="px-5 py-3 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition block w-full text-center">Oyun</label>
@@ -60,13 +68,13 @@
                 <input type="checkbox" name="tags" value="destek" id="t-destek" class="hidden tag-checkbox">
                 <label for="t-destek" class="px-5 py-3 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition block w-full text-center">Destek</label>
                 
-                <input type="checkbox" name="tags" value="rp" id="t-rp" class="hidden tag-checkbox">
-                <label for="t-rp" class="px-5 py-3 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition block w-full text-center">Roleplay</label>
+                <input type="checkbox" name="tags" value="sohbet" id="t-sohbet" class="hidden tag-checkbox">
+                <label for="t-sohbet" class="px-5 py-3 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black uppercase cursor-pointer transition block w-full text-center">Sohbet</label>
             </div>
 
             <div class="flex gap-4">
                 <button onclick="closeModal()" class="flex-1 bg-white/5 p-5 rounded-2xl font-black uppercase text-[10px]">Vazgeç</button>
-                <button onclick="finalSubmit()" class="flex-1 bg-indigo-600 p-5 rounded-2xl font-black uppercase text-[10px] shadow-lg shadow-indigo-600/30">Yayına Al</button>
+                <button onclick="finalSubmit()" class="flex-1 bg-indigo-600 p-5 rounded-2xl font-black uppercase text-[10px] shadow-lg shadow-indigo-600/30">Kaydet</button>
             </div>
         </div>
     </div>
@@ -75,7 +83,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-        // AYARLAR
         const CLIENT_ID = "1474791108054618319"; 
         const DESTEK_SUNUCU_ID = "1470113199226491162"; 
         const REDIRECT_URI = "https://advibetr.vercel.app/ekle.html";
@@ -123,9 +130,9 @@
                 userId = user.id;
                 document.getElementById('userInfo').innerHTML = `
                     <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5">
-                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="w-6 h-6 rounded-full border border-indigo-500">
-                        <span class="text-[9px] font-black uppercase italic">${user.username}</span>
-                        <button onclick="logout()" class="text-red-500 text-[9px] font-black uppercase ml-2">Çıkış</button>
+                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="w-6 h-6 rounded-full border border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]">
+                        <span class="text-[9px] font-black uppercase italic tracking-tighter">${user.username}</span>
+                        <button onclick="logout()" class="text-red-500 text-[9px] font-black uppercase ml-2 hover:opacity-70">Çıkış</button>
                     </div>
                 `;
             } catch(e) { logout(); }
@@ -138,24 +145,13 @@
                 headers: { Authorization: `Bearer ${currentToken}` }
             });
             const guilds = await res.json();
-            
-            // Destek Sunucusu Kontrolü
             const isInSupport = guilds.some(g => g.id === DESTEK_SUNUCU_ID);
-
-            // Eğer destek sunucusundan çıktıysa veritabanından sil
-            if (!isInSupport) {
-                Object.keys(dbServers).forEach(gid => {
-                    if (dbServers[gid].ownerId === userId) {
-                        remove(ref(db, `servers/${gid}`));
-                    }
-                });
-            }
 
             const list = document.getElementById('guildList');
             const noGuilds = document.getElementById('noGuildsMessage');
             list.innerHTML = "";
             
-            const adminGuilds = guilds.filter(g => (g.permissions & 0x8) === 0x8);
+            const adminGuilds = guilds.filter(g => (g.permissions & 0x8) === 0x8 || (g.permissions & 0x20) === 0x20);
 
             if (adminGuilds.length === 0) {
                 noGuilds.classList.remove('hidden');
@@ -166,17 +162,22 @@
                     const logo = g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : 'https://cdn-icons-png.flaticon.com/512/2111/2111370.png';
                     
                     list.innerHTML += `
-                        <div class="glass p-8 rounded-[40px] flex flex-col items-center text-center border border-white/5">
+                        <div class="glass p-8 rounded-[40px] flex flex-col items-center text-center border border-white/5 hover:border-indigo-500/30 transition-all duration-500">
                             <img src="${logo}" class="w-20 h-20 rounded-[30px] mb-6 border border-white/10 shadow-2xl">
                             <h3 class="font-black uppercase italic text-sm mb-1">${g.name}</h3>
-                            <p class="text-[9px] text-slate-500 mb-8 font-bold uppercase tracking-widest">Yönetici</p>
+                            <p class="text-[9px] text-slate-500 mb-8 font-bold uppercase tracking-widest">${isAdded ? 'Listede Aktif' : 'Eklenmemiş'}</p>
                             
+                            <div class="w-full flex gap-2">
                             ${!isInSupport 
-                                ? `<button class="w-full py-4 rounded-2xl blocked-btn text-[9px] font-black uppercase">🚫 AdVibe Destek Sunucusuna Girmelisin</button>`
+                                ? `<button class="w-full py-4 rounded-2xl blocked-btn text-[9px] font-black uppercase">🚫 Advibe TR'ye Katılmalısın</button>`
                                 : isAdded 
-                                    ? `<button onclick="removeS('${g.id}')" class="w-full py-4 rounded-2xl bg-red-500/10 text-red-500 text-[10px] font-black uppercase border border-red-500/20">Kaldır</button>`
-                                    : `<button onclick="openM('${g.id}','${g.name}','${logo}', '${g.description || ""}')" class="w-full py-4 rounded-2xl bg-indigo-600 text-white text-[10px] font-black uppercase">Listeye Ekle</button>`
+                                    ? `
+                                      <button onclick="openM('${g.id}','${g.name}','${logo}', '${g.description || ""}')" class="w-1/2 py-4 rounded-2xl bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase border border-amber-500/20">Düzenle</button>
+                                      <button onclick="removeS('${g.id}')" class="w-1/2 py-4 rounded-2xl bg-red-500/10 text-red-500 text-[10px] font-black uppercase border border-red-500/20">Kaldır</button>
+                                      `
+                                    : `<button onclick="openM('${g.id}','${g.name}','${logo}', '${g.description || ""}')" class="w-full py-4 rounded-2xl bg-indigo-600 text-white text-[10px] font-black uppercase shadow-lg shadow-indigo-600/20">Listeye Ekle</button>`
                             }
+                            </div>
                         </div>
                     `;
                 });
@@ -187,27 +188,33 @@
         window.openM = (id, n, l, desc) => {
             activeGuild = { id, n, l, desc };
             document.getElementById('modalTitle').innerText = n;
-            // Modalı açınca önceki seçimleri temizle
-            document.querySelectorAll('input[name="tags"]').forEach(c => c.checked = false);
+            document.getElementById('inviteLinkInput').value = dbServers[id]?.link || "";
+            
+            // Kategori seçimlerini temizle veya mevcutsa doldur
+            const currentTags = dbServers[id]?.kategoriler?.split(' ') || [];
+            document.querySelectorAll('input[name="tags"]').forEach(c => {
+                c.checked = currentTags.includes(c.value);
+            });
+
             document.getElementById('tagModal').classList.remove('hidden');
         };
 
         window.closeModal = () => { document.getElementById('tagModal').classList.add('hidden'); };
 
-        // Kategori Limit Kontrolü (Hatalıydı, düzeltildi)
         document.getElementById('tagContainer').addEventListener('change', (e) => {
-            if(e.target.name === 'tags') {
-                const checked = document.querySelectorAll('input[name="tags"]:checked');
-                if(checked.length > 2) {
-                    e.target.checked = false;
-                    alert("En fazla 2 kategori seçebilirsin!");
-                }
+            const checked = document.querySelectorAll('input[name="tags"]:checked');
+            if(checked.length > 2) {
+                e.target.checked = false;
+                alert("En fazla 2 kategori seçebilirsin!");
             }
         });
 
         window.finalSubmit = () => {
             const tags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(c => c.value);
+            const inviteLink = document.getElementById('inviteLinkInput').value;
+
             if(tags.length === 0) return alert("En az 1 kategori seçmelisin!");
+            if(!inviteLink.includes("discord.gg/")) return alert("Lütfen geçerli bir kalıcı davet linki girin!");
 
             set(ref(db, `servers/${activeGuild.id}`), {
                 ad: activeGuild.n,
@@ -215,19 +222,19 @@
                 guildId: activeGuild.id,
                 ownerId: userId,
                 kategoriler: tags.join(' '),
-                aciklama: activeGuild.desc || "Sunucu açıklaması belirtilmemiş.",
-                likes: 0,
-                dislikes: 0,
-                link: `https://discord.gg/davet`, 
+                aciklama: activeGuild.desc || "Sunucu açıklaması Discord'dan otomatik çekildi.",
+                link: inviteLink,
+                tarih: new Date().toLocaleDateString('tr-TR'),
+                likes: dbServers[activeGuild.id]?.likes || 0,
                 sira: 99
             }).then(() => {
                 closeModal();
-                alert("Sunucu başarıyla eklendi!");
+                alert("Sunucu güncellendi/eklendi!");
             });
         };
 
         window.removeS = (id) => {
-            if(confirm("Sunucuyu silmek istediğine emin misin?")) remove(ref(db, `servers/${id}`));
+            if(confirm("Sunucuyu listeden kaldırmak istediğine emin misin?")) remove(ref(db, `servers/${id}`));
         };
 
         window.discordLogin = () => {
