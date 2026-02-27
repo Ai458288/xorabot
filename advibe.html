@@ -1,153 +1,54 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdVibe | Discord Sunucu Listesi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Poppins', sans-serif; background: #020617; color: white; overflow-x: hidden; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); padding: 10px 20px; border-radius: 14px; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #64748b; transition: 0.3s; white-space: nowrap; }
-        .active-btn { background: #4f46e5 !important; color: white !important; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
-    <title>Ad Vibe TR | Reklam & Dijital Çözümler</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yeni Domaine Geçtik!</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+  }
 
-<meta name="description" content="Ad Vibe TR – dijital reklam, sosyal medya ve online çözümler. Ad Vibe TR resmi web sitesi.">
+  .message {
+    text-align: center;
+    color: white;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+    animation: fadeIn 2s ease-in-out forwards;
+  }
 
-<meta name="keywords" content="ad vibe tr, advibe tr, ad vibe reklam, ad vibe türkiye">
+  .message a {
+    display: block;
+    margin-top: 15px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .message a:hover {
+    color: #ffeb3b;
+    transform: scale(1.1);
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+</style>
 </head>
-<body oncontextmenu="return false;">
-
-    <nav class="max-w-6xl mx-auto flex justify-between items-center p-4 md:p-6 mb-4">
-        <div class="flex flex-col md:flex-row md:items-center gap-3">
-            <h1 class="text-2xl font-black italic uppercase">Ad<span class="text-indigo-500">Vibe</span></h1>
-            <div class="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
-                <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span id="onlineCount" class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">...</span>
-            </div>
-        </div>
-        <div class="flex items-center gap-3">
-            <button onclick="cikisYap()" class="text-[10px] font-bold text-red-500 uppercase hover:text-white transition">Çıkış</button>
-            <a href="ekle.html" class="glass px-5 py-2.5 rounded-full text-[10px] font-black border border-indigo-500/30 text-indigo-300 uppercase italic">Sunucu Ekle</a>
-        </div>
-    </nav>
-
-    <div class="max-w-6xl mx-auto px-4 mb-8 overflow-x-auto flex gap-2 pb-4 no-scrollbar">
-        <button onclick="filterServers('all')" class="filter-btn active-btn">HEPSİ</button>
-        <button onclick="filterServers('destek')" class="filter-btn">DESTEK</button>
-        <button onclick="filterServers('satis')" class="filter-btn">SATIŞ</button>
-        <button onclick="filterServers('oyun')" class="filter-btn">OYUN</button>
-        <button onclick="filterServers('rp')" class="filter-btn">ROLEPLAY</button>
-    </div>
-
-    <main class="max-w-6xl mx-auto px-4 md:px-6 flex flex-col lg:flex-row gap-8 pb-20">
-        <div id="serverGrid" class="flex-1 grid gap-6 grid-cols-1 md:grid-cols-2 self-start"></div>
-        <div class="w-full lg:w-80 shrink-0">
-            <div class="glass rounded-[30px] p-5 border border-white/5 flex flex-col h-[500px] sticky top-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-[10px] font-black uppercase italic text-indigo-400">Canlı Sohbet</h2>
-                    <span id="userDisplay" class="text-[8px] bg-white/5 px-2 py-1 rounded text-slate-400 uppercase"></span>
-                </div>
-                <div id="chatBox" class="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 text-[11px]"></div>
-                <div class="relative">
-                    <input type="text" id="chatInput" placeholder="Mesaj..." class="w-full bg-black/40 border border-white/5 p-4 rounded-2xl outline-none focus:border-indigo-500 text-[11px]" onkeypress="if(event.key==='Enter') sendMsg()">
-                    <button onclick="sendMsg()" class="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-500 font-black text-[10px]">OK</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, onValue, get, set, push, runTransaction, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
-
-        const myName = localStorage.getItem('advibe_nick');
-        if(!myName) window.location.href = 'index.html';
-        document.getElementById('userDisplay').innerText = myName;
-
-        window.cikisYap = () => { localStorage.removeItem('advibe_nick'); window.location.href = 'index.html'; };
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD2426BMQHr6RJ5bTjw1Me8PTHmcFhcO7M",
-            authDomain: "advibe-c61a6.firebaseapp.com",
-            databaseURL: "https://advibe-c61a6-default-rtdb.firebaseio.com",
-            projectId: "advibe-c61a6",
-            appId: "1:699784874039:web:192ade518091e7279757b2"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // --- SAYAÇ ---
-        const onlineUsersRef = ref(db, 'online_users');
-        const myPresence = push(onlineUsersRef);
-        set(myPresence, { active: true });
-        onDisconnect(myPresence).remove();
-        onValue(onlineUsersRef, (snap) => {
-            const count = snap.numChildren();
-            document.getElementById('onlineCount').innerText = (count > 0 ? count : 1) + " İZLEYİCİ";
-        });
-
-        // --- MESAJ GÖNDERME (5 DK SINIR) ---
-        window.sendMsg = () => {
-            const inp = document.getElementById('chatInput');
-            const lastMsg = localStorage.getItem('last_msg_time');
-            const simdi = Date.now();
-            const limit = 5 * 60 * 1000;
-
-            if (lastMsg && (simdi - lastMsg < limit)) {
-                const kalan = Math.ceil((limit - (simdi - lastMsg)) / 1000 / 60);
-                alert(`Sakin kanka! Yeni mesaj için ${kalan} dakika bekle.`);
-                return;
-            }
-
-            if(!inp.value.trim()) return;
-            push(ref(db, 'global_chat'), { user: myName, mesaj: inp.value, zaman: serverTimestamp() });
-            localStorage.setItem('last_msg_time', simdi);
-            inp.value = "";
-        };
-
-        onValue(ref(db, 'global_chat'), (snap) => {
-            const box = document.getElementById('chatBox'); box.innerHTML = "";
-            snap.forEach(c => {
-                const m = c.val();
-                box.innerHTML += `<div><span class="font-black text-indigo-400 uppercase text-[9px] italic">${m.user}:</span><p class="text-slate-400">${m.mesaj}</p></div>`;
-            });
-            box.scrollTop = box.scrollHeight;
-        });
-
-        window.oyVer = async (id, tip) => {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            const ip = data.ip.replace(/\./g, '_');
-            const voteRef = ref(db, `votes/${id}/${ip}`);
-            const snapshot = await get(voteRef);
-            if (snapshot.exists() && snapshot.val() === tip) return;
-            runTransaction(ref(db, `servers/${id}`), (s) => {
-                if (s) {
-                    if (!s.likes) s.likes = 0; if (!s.dislikes) s.dislikes = 0;
-                    if (tip === 'like') { s.likes++; if(snapshot.val()==='dislike') s.dislikes--; }
-                    else { s.dislikes++; if(snapshot.val()==='like') s.likes--; }
-                } return s;
-            }).then(() => set(voteRef, tip));
-        };
-
-        onValue(ref(db, 'servers'), (snap) => {
-            const grid = document.getElementById('serverGrid'); grid.innerHTML = "";
-            let servers = []; snap.forEach(c => { servers.push({id: c.key, ...c.val()}); });
-            servers.sort((a,b) => (a.sira || 99) - (b.sira || 99));
-            servers.forEach(s => {
-                grid.innerHTML += `<div class="glass p-6 rounded-[30px] border border-white/5 server-card all ${s.kategoriler}"><div class="flex justify-between items-start mb-4"><span class="bg-indigo-600/20 text-indigo-400 text-[9px] font-black px-2 py-1 rounded uppercase italic">#${s.tag || 'AKTİF'}</span><div class="flex gap-3"><button onclick="oyVer('${s.id}', 'like')" class="text-[10px] font-bold text-emerald-400">👍 ${s.likes || 0}</button><button onclick="oyVer('${s.id}', 'dislike')" class="text-[10px] font-bold text-red-400">👎 ${s.dislikes || 0}</button></div></div><div class="flex items-center gap-4 mb-4"><img src="${s.logo}" class="w-14 h-14 rounded-2xl border border-white/10 object-cover"><div><h3 class="text-lg font-black uppercase italic">${s.ad}</h3><div class="flex items-center gap-1"><div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div><span class="text-[8px] font-black text-emerald-500 uppercase">Aktif</span></div></div></div><p class="text-slate-400 text-[11px] h-8 overflow-hidden line-clamp-2 mb-4">${s.aciklama}</p><div class="flex justify-between items-center border-t border-white/5 pt-4"><span class="text-[8px] font-bold text-slate-500">#${s.kategoriler}</span><div class="flex gap-2"><a href="server.html?id=${s.id}" class="bg-white/5 text-white px-4 py-2 rounded-xl font-black text-[9px] uppercase">İNCELE</a><a href="${s.link}" target="_blank" class="bg-indigo-600 text-white px-5 py-2 rounded-xl font-black text-[9px] uppercase">KATIL</a></div></div></div>`;
-            });
-        });
-
-        window.filterServers = (cat) => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-btn'));
-            event.target.classList.add('active-btn');
-            document.querySelectorAll('.server-card').forEach(c => { c.style.display = (cat === 'all' || c.classList.contains(cat)) ? 'block' : 'none'; });
-        };
-    </script>
+<body>
+  <div class="message">
+    Yeni Domaine Geçtik!
+    <a href="https://advibetr.gt.tc/" target="_blank">advibetr.gt.tc</a>
+  </div>
 </body>
 </html>
