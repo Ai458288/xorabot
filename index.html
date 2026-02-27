@@ -1,37 +1,54 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Giriş | AdVibe</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <style>
-        html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; position: fixed; width: 100%; }
-        body { font-family: 'Poppins', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617); display: flex; align-items: center; justify-content: center; touch-action: none; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yeni Domaine Geçtik!</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+  }
+
+  .message {
+    text-align: center;
+    color: white;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+    animation: fadeIn 2s ease-in-out forwards;
+  }
+
+  .message a {
+    display: block;
+    margin-top: 15px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .message a:hover {
+    color: #ffeb3b;
+    transform: scale(1.1);
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+</style>
 </head>
 <body>
-    <div class="glass p-10 rounded-[40px] w-[90%] max-w-[400px] text-center shadow-2xl">
-        <div class="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(79,70,229,0.5)]">
-            <span class="text-white text-3xl font-black italic">AV</span>
-        </div>
-        <h1 class="text-3xl font-black text-white mb-2 italic uppercase tracking-tighter">Hoş Geldin!</h1>
-        <p class="text-slate-400 text-[11px] mb-8 font-bold uppercase tracking-widest opacity-60">Sohbet İçin Discord Adını Yaz</p>
-        <input type="text" id="username" placeholder="Kullanıcı Adın..." class="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-white outline-none focus:border-indigo-500 transition-all text-center font-bold mb-4">
-        <button onclick="girisYap()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl text-white font-black transition-all shadow-lg uppercase tracking-widest text-xs">Giriş Yap</button>
-    </div>
-
-    <script>
-        function girisYap() {
-            const nick = document.getElementById('username').value.trim();
-            if(nick.length >= 2) {
-                localStorage.setItem('advibe_nick', nick);
-                window.location.href = 'advibe.html';
-            } else { alert("İsim çok kısa kanka!"); }
-        }
-        window.onload = () => { if(localStorage.getItem('advibe_nick')) window.location.href = 'advibe.html'; };
-    </script>
+  <div class="message">
+    Yeni Domaine Geçtik!
+    <a href="https://advibetr.gt.tc/" target="_blank">advibetr.gt.tc</a>
+  </div>
 </body>
 </html>
